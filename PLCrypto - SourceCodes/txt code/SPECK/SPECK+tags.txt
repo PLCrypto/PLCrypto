@@ -1,0 +1,27 @@
+Name			Data Type
+SCAN_CYCLE_TIME		DINT
+Speck_AS_res		DINT[2]
+Speck_AS_tmp		DINT
+Speck_AS_X		DINT[2]
+Speck_AS_Y		DINT[2]
+Speck_Block_size	DINT
+Speck_Carry_Bit		DINT
+Speck_Ciphertext	DINT[2,2]
+Speck_dec_i		DINT
+Speck_dec_j		DINT
+Speck_enc_i		DINT
+Speck_enc_j		DINT
+Speck_i			DINT
+Speck_j			DINT
+Speck_key_size		DINT
+Speck_Plaintext		DINT[2,2]
+Speck_Rd_Max		DINT
+Speck_Rotate_Result	DINT[2]
+Speck_Round_Keys	DINT[34,2]
+Speck_Sign_Bits		DINT[2]
+Speck_SR_m		DINT[2]
+Speck_tmp		DINT
+Speck_tmp1		DINT
+Speck_Ver		DINT
+Speck_x			DINT[2]
+Speck_y			DINT[2]

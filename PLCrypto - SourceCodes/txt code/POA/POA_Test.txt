@@ -1,0 +1,8 @@
+If S:FS Then
+	jsr(POA_PF_Init);
+	
+
+End_If;
+
+//JSR(POA_ProofGeneration);
+JSR(POA_Replenishment);

@@ -1,0 +1,26 @@
+JSR(PRESENT_Init);        //Init params
+
+PT_State[0]:=PT_Plaintext[0];
+PT_State[1]:=PT_Plaintext[1];
+
+For PT_Enc_i:=1 to PT_Rd_Max-1 by 1 do 
+	JSR(PRESENT_GetRoundKey);
+	JSR(PRESENT_AddRoundKey);
+	JSR(PRESENT_SPLayer); 
+	PT_Round_Keys[PT_Enc_i,0]:=0;
+	PT_Round_Keys[PT_Enc_i,1]:=0;
+End_For;
+
+JSR(PRESENT_GetRoundKey);
+JSR(PRESENT_AddRoundKey);
+PT_Ciphertext[0]:=PT_State[0];
+PT_Ciphertext[1]:=PT_State[1];
+
+PT_Round_Keys[PT_Enc_i,0]:=0;
+PT_Round_Keys[PT_Enc_i,1]:=0;
+
+
+
+JSR(PRESENT_ClearKey);
+
+

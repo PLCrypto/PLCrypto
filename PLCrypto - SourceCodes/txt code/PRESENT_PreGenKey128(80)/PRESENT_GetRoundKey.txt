@@ -1,0 +1,5 @@
+PT_Rd_Key[0]:=PT_Round_Keys[PT_Enc_i,0];
+PT_Rd_Key[1]:=PT_Round_Keys[PT_Enc_i,1];
+
+PT_Round_Keys[PT_Enc_i,0]:=0;
+PT_Round_Keys[PT_Enc_i,1]:=0;

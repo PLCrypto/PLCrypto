@@ -1,0 +1,10 @@
+
+
+//initialize version 
+
+Simon_Ver:=2;     // 0: 32/64, 1: 64: 96, 2: 64:128, 3:128/128, 4:128/192, 5: 128/256
+
+PRG_j:=0;
+PRG_Res_Len :=  (PRG_Counter[0] AND 16#0000ffff)-1;
+
+JSR(SIMON_Init);

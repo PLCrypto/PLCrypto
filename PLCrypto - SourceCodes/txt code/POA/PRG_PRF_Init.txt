@@ -1,0 +1,8 @@
+//initialize version 
+
+
+Chaskey_round:=11;
+PRG_j:=0;
+PRG_Res_Len :=  (PRG_Counter[0] AND 16#0000ffff)-1;
+
+JSR(CHASKEY_Init);

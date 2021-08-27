@@ -1,0 +1,70 @@
+(*
+void WordXorByte(byte state[D][D], const byte*str, int BitOffSet, int WordOffSet, int NoOfBits)
+{
+	int i = 0;
+	while(i < NoOfBits)
+	{
+		state[(WordOffSet+(i/S))/D][(WordOffSet+(i/S))%D] ^= GetByte(str, BitOffSet+i, min(S, NoOfBits-i))<<(S-min(S,NoOfBits-i));
+		i += S;
+	}
+}
+*)
+
+
+
+
+PHT_WordXorByte_i:=0;
+
+While PHT_WordXorByte_i<PHT_WordXorByte_NoOfBits Do
+	PHT_Byte_indxi:=  (PHT_WordXorByte_WordOffset+(PHT_WordXorByte_i/PHT_S))/PHT_D;
+	PHT_Bit_indxj:= (PHT_WordXorByte_WordOffset+(PHT_WordXorByte_i/PHT_S)) MOD PHT_D;
+	
+	PHT_GetByte_BitOffSet:=PHT_WordXorByte_BitOffSet + PHT_WordXorByte_i;
+
+	//min(S,NoOfBits-i)
+	PHT_Tmp[0]:=PHT_WordXorByte_NoOfBits- PHT_WordXorByte_i; 
+	if PHT_Tmp[0]> PHT_S Then
+		PHT_Tmp[0]:=PHT_S;
+	End_if;
+	
+
+	PHT_GetByte_NoOfBits:=PHT_Tmp[0];
+		
+	JSR(PHOTON_GetByte);
+
+	PHT_Tmp[0]:= PHT_S- PHT_GetByte_NoOfBits; 
+	
+	CASE PHT_Tmp[0] OF
+		1:
+			PHT_GetByte_Res:=PHT_GetByte_Res*2;
+		2:
+			PHT_GetByte_Res:=PHT_GetByte_Res*4;
+
+		3:
+			PHT_GetByte_Res:=PHT_GetByte_Res*8;
+		4:
+			PHT_GetByte_Res:=PHT_GetByte_Res*16;
+		5:
+			PHT_GetByte_Res:=PHT_GetByte_Res*32;
+		6:
+			PHT_GetByte_Res:=PHT_GetByte_Res*64;
+		7:
+			PHT_GetByte_Res:=PHT_GetByte_Res*128;
+		8:
+			PHT_GetByte_Res:=PHT_GetByte_Res*256;
+	End_Case;
+
+	If PHT_S=4 Then
+		PHT_State[PHT_Byte_indxi,PHT_Bit_indxj]:=(PHT_State[PHT_Byte_indxi,PHT_Bit_indxj] XOR PHT_GetByte_Res) AND 16#F;
+	else
+		PHT_State[PHT_Byte_indxi,PHT_Bit_indxj]:=(PHT_State[PHT_Byte_indxi,PHT_Bit_indxj] XOR PHT_GetByte_Res) AND 16#Ff;
+	End_if;	
+
+
+
+
+
+
+
+	PHT_WordXorByte_i:=PHT_WordXorByte_i+PHT_S;
+End_while;

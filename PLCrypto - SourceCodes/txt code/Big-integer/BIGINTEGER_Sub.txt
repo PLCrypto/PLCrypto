@@ -1,0 +1,51 @@
+//Calculate the  subtraction of big numbers.  Resource: page 595 of the handbook.
+//input positive big intergers  Sub_input_x[] and Sub_input_y[], each having UHF_sints base UHF_base digits with x > y.
+//output: the result Sub_Result[] in radix UHF_base representation.
+
+// Subtraction test
+(*if S:FS then
+	Sub_Digits:= 10;  //the Digits of input.
+	UHF_base:= 10; //input in decimal
+	for Sub_i:=0 to Sub_Digits-1 by 1 do  //assign value to input
+		Sub_input_x[Sub_i]:=9;
+		Sub_input_y[Sub_i]:=6;
+	end_for;
+end_if;*)
+
+
+JSR(BigNumber_Init);
+
+
+for Sub_i:=0 to Sub_Digits-1 by 1 do
+	Sub_Result[Sub_i]:=0;  //Initialize the sum to 0.
+end_for;
+
+//Calculate the result Sub_input_x[] - Sub_input_y[].
+Sub_c:=0;   //Initialize carry to zero.
+
+for Sub_j:=0 to Sub_Digits-1 by 1 do
+
+	Sub_Result[Sub_j]:= Sub_input_x[Sub_j]-Sub_input_y[Sub_j]-Sub_c;
+	Add_c.[0]:=Add_Result[Add_j].[Big_lb];
+	Case Big_Ver OF
+		0:
+			Add_Result[Sub_j]:= Add_tmp MOD Big_base;
+		1:
+			Add_Result[Sub_j]:= Add_Result[Sub_j] AND 16#7FFF;
+		2:
+			//Add_Result[Sub_j]:= Add_Result[Sub_j] AND 16#3FFFFFFF‬;
+			Add_Result[Sub_j].[30]:=0;
+			Add_Result[Sub_j].[31]:=0;
+
+	End_Case;
+
+	  // Compute every digit of the subtraction.
+end_for;
+
+
+for Sub_i:=0 to Sub_Digits-1 by 1 do
+	Sub_input_x[Sub_i]:=0;
+	Sub_input_y[Sub_i]:=0;
+end_for;
+
+Add_c:=0;

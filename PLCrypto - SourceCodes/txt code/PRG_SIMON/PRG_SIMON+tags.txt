@@ -1,0 +1,23 @@
+Name			Data Type
+PRG_Counter		DINT[2]
+PRG_i			DINT
+PRG_j			DINT
+PRG_Res_Len		DINT
+PRG_Result		DINT[256]
+SCAN_CYCLE_TIME		DINT
+Simon_Ciphertext	DINT[2,2]
+Simon_dec_i		DINT
+Simon_dec_j		DINT
+Simon_enc_i		DINT
+Simon_enc_j		DINT
+Simon_i			DINT
+Simon_j			DINT
+Simon_Plaintext		DINT[2,2]
+Simon_Rd_Max		DINT
+Simon_Rotate_Result	DINT[2]
+Simon_Round_Keys	DINT[72,2]
+Simon_tmp1		DINT[2]
+Simon_tmp2		DINT[2]
+Simon_Ver		DINT
+Simon_x			DINT[2]
+Simon_y			DINT[2]

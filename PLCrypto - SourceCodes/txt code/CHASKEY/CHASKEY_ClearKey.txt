@@ -1,0 +1,16 @@
+
+Chaskey_key[0]:= 0;
+Chaskey_key[1]:= 0;
+Chaskey_key[2]:= 0;
+Chaskey_key[3]:= 0;
+
+
+Chaskey_subkey_1[0]:= 0; 
+Chaskey_subkey_1[1]:= 0;
+Chaskey_subkey_1[2]:= 0;
+Chaskey_subkey_1[3]:= 0;
+
+Chaskey_subkey_2[0]:= 0;
+Chaskey_subkey_2[1]:= 0;
+Chaskey_subkey_2[2]:= 0;
+Chaskey_subkey_2[3]:= 0;

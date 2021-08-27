@@ -1,0 +1,31 @@
+if S:FS then 
+
+(*	Chaskey_input_pi[0]:= -2054128804;
+	Chaskey_input_pi[1]:= -1998792764;
+	Chaskey_input_pi[2]:= 1871086030;
+	Chaskey_input_pi[3]:= 1068001685;*)
+
+(* //test permutation
+ 	Chaskey_round:=11;
+	Chaskey_input_pi[0]:= 857870592;
+	Chaskey_input_pi[1]:= 2003195204;
+	Chaskey_input_pi[2]:= -1146447480;
+	Chaskey_input_pi[3]:= -1122868;
+
+    Chaskey_LastBlk[0]:= 1;
+	Chaskey_LastBlk[1]:= 0;
+	Chaskey_LastBlk[2]:= 0;
+	Chaskey_LastBlk[3]:= 0;
+	JSR(CHASKEY_128);  *)
+
+	Chaskey_mlen:=0;
+	Chaskey_MsgBitLen:=(Chaskey_mlen+1)*8; //bit length of message
+
+	for test_i:=0 to Chaskey_mlen by 1 do
+   		Chaskey_Message[test_i]:= test_i;
+	end_for;
+
+	Chaskey_round:=11;
+	JSR(CHASKEY_128);
+
+end_if;

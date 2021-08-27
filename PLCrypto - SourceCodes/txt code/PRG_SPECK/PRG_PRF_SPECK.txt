@@ -1,0 +1,19 @@
+// init PRG_Count[0] and PRG_Count[1] during application.. for PRF.. they could be any values
+//For PRG application, PRG_Count[0] defines the output length (i.e., the number of 64-bit, e.g., 128-bit output, PRG_Count[0]:=2)
+
+
+JSR(PRG_PRF_Init);
+
+PRG_j:=0;
+For PRG_i:=0 to PRG_Res_Len by 1 do
+	Speck_Plaintext[0,0]:=PRG_Counter[0]; //Upper bits of current plaintext
+	Speck_Plaintext[1,0]:=PRG_Counter[1];  //Lower bits of current plaintext
+	JSR(SPECK_Enc);
+	PRG_Result[PRG_j]:=Speck_Ciphertext[0,0];
+	PRG_Result[PRG_j+1]:=Speck_Ciphertext[1,0];
+
+	PRG_j:=PRG_j+2;
+
+End_For;
+
+JSR(SPECK_ClearKey);

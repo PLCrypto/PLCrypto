@@ -1,0 +1,38 @@
+if S:FS then
+	Simon_Ver:=5;     // 0: 32/64, 1: 64: 96, 2: 64:128, 3:128/128, 4:128/192, 5: 128/256
+	//32-64
+	Case Simon_Ver Of
+		0,1,2:
+(*			Simon_Plaintext[0,0]:=26743;  //ver = 0
+			Simon_Plaintext[1,0]:=25957;*)
+
+(*			Simon_Plaintext[0,0]:=1852402787;   //ver = 1
+			Simon_Plaintext[1,0]:=1869750375;*)
+
+			Simon_Plaintext[0,0]:=543452789;    //ver = 2
+			Simon_Plaintext[1,0]:=1701538156;
+
+		3,4,5: 
+(*			Simon_Plaintext[0,0]:=1634890784;  //ver = 3
+			Simon_Plaintext[0,1]:=1819043190;
+			Simon_Plaintext[1,0]:=544436837;
+			Simon_Plaintext[1,1]:=1668506980;*)
+
+(*			Simon_Plaintext[0,0]:=1700948338;   //ver = 4
+			Simon_Plaintext[0,1]:=1701345056;
+			Simon_Plaintext[1,0]:=1752440942;
+			Simon_Plaintext[1,1]:=543519333;*)
+
+			Simon_Plaintext[0,0]:=1629516649;
+			Simon_Plaintext[0,1]:=1835627296;   //ver = 5
+			Simon_Plaintext[1,0]:=544042863;
+			Simon_Plaintext[1,1]:=1948282473;
+	
+	End_Case;
+	JSR(SIMON_Enc);
+end_if;
+
+
+
+	//JSR(SIMON_Dec);
+

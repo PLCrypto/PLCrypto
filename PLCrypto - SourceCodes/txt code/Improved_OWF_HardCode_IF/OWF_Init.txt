@@ -1,0 +1,29 @@
+	If OWF_Ver=0 then
+		OWF_InputLen:=255;  //bits of input.
+		OWF_InputMaxInd:=7;  //maximum index for dints which store the bits of input. 
+ 	For OWF_i:=0 to OWF_InputMaxInd by 1 do
+		OWF_Result[OWF_i]:=0;
+	End_For;
+
+	end_if;
+
+
+	If OWF_Ver=1 then
+		OWF_InputLen:= 383;
+		OWF_InputMaxInd:=11;  //maximum index for array.
+	 	For OWF_i:=0 to OWF_InputMaxInd by 1 do
+			OWF_Result[OWF_i]:=0;
+		End_For;
+	
+	end_if;
+
+
+	If OWF_Ver=2 then
+		OWF_InputLen:= 511;
+		OWF_InputMaxInd:=15;  //maximum index for array.
+		 For OWF_i:=0 to OWF_InputMaxInd by 1 do
+			OWF_Result[OWF_i]:=0;
+		End_For;
+
+	end_if;
+	

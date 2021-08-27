@@ -1,0 +1,18 @@
+Big_Comp_Res:=0;    //0: x>=y,  1: x<y
+
+
+Big_Comp_i:=AddMul_Digits-1;
+
+
+While Big_Comp_i>= 0 do 
+
+	if AddMul_2Base[Big_Comp_i]< AddMul_Result[Big_Comp_i] Then
+	 	Big_Comp_Res:=1;
+		exit;
+	End_If;
+
+	Big_Comp_i:=Big_Comp_i-1;
+
+End_while;
+
+

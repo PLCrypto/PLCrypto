@@ -1,0 +1,184 @@
+//Calculate the division of big numbers.  Resource: page 598 of the handbook.
+//input positive big intergers  Div_input_x[] and Div_input_y[], Div_input_x[] having UHF_sints base UHF_base digits.
+//output: the quotient Div_quo[] and remainder Div_rem[] in radix UHF_base representation.
+
+(*if S:FS then
+	// division test
+	Div_state:=0;
+ 	Div_Digits:= 10;  //the Digits of input.
+	UHF_base:= 10; //input in decimal
+	for Div_i:=0 to Div_Digits-1 by 1 do   //assign value to input
+		Div_input_x[Div_i]:=9;
+	end_for;
+	for Div_i:=0 to (Div_Digits-1)/2 by 1 do
+		Div_input_y[Div_i]:=9;
+	end_for;
+end_if;*)
+
+	for Div_i:=Div_Digits-1 to 0 by -1 do  //Calculate the numbers of digit of Div_input_x[].
+		if Div_input_x[Div_i] <> 0 then
+			Div_x_Digits:= Div_i;
+			exit;
+		end_if;
+	end_for;
+
+	for Div_i:=Div_Digits-1 to 0 by -1 do  ////Calculate the numbers of digits of Div_input_y[].
+		if Div_input_y[Div_i] <> 0 then
+			Div_y_Digits:= Div_i;
+			exit;
+		end_if;
+	end_for;
+
+	Div_q_Digits:= Div_x_Digits - Div_y_Digits; //the numbers of digit of Div_quotient[].
+	for Div_i:=0 to Div_q_Digits by 1 do
+		Div_quotient[Div_i]:= 0;    //Initialize Div_quotient[] is zero.
+	end_for;  
+
+	for Div_i:=0 to Div_x_Digits by 1 do
+		Div_mul[Div_i]:=0;
+	end_for;
+
+
+//When the dividend is less than the divisor, e.g Div_input_x is less than Div_input_y
+for Div_i:=Div_Digits-1 to 0 by -1 do
+	if Div_x_Digits <= Div_y_Digits and Div_input_x[Div_i] < Div_input_y[Div_i] then
+		Div_quotient[0]:=0;
+		for Div_i:=0 to Div_x_Digits by 1 do
+			Div_remainder[Div_i]:=Div_input_x[Div_i];
+		end_for;
+		exit;
+	else
+		Div_state:=1;
+	end_if;
+end_for;
+
+//When the dividend is equal to the divisor
+if Div_state=1 then
+	for Div_i:=Div_Digits-1 to 0 by -1 do
+		if Div_x_Digits = Div_y_Digits and Div_input_x[Div_i] = Div_input_y[Div_i] then
+			Div_quotient[0]:= 1;
+			Div_remainder[0]:= 0;
+		else
+			Div_state:=2;
+		end_if;
+	end_for;
+end_if;
+
+//When the dividend Div_input_x[] is greater than the divisor
+if Div_state=2 then
+	//Compute highest digit value of quotient Div_quotient[].
+	for Div_i:= Div_x_Digits to Div_q_Digits by -1 do  //compute Div_input_y[]*(power(UHF_base,(Div_q_Digits)).
+		Div_mul[Div_i]:= Div_input_y[Div_i-Div_q_Digits];  
+	end_for;
+	for Div_i:= 0 to Div_q_Digits-1 by 1 do
+		Div_mul[Div_i]:= 0;
+	end_for;
+	for Div_i:=Div_x_Digits to 0 by -1 do  //Calculate the numbers of digit of Div_mul[]
+		if Div_mul[Div_i]<>0 then
+			Div_m:= Div_i;
+			exit;
+		end_if;
+	end_for;
+
+// Determine whether Div_input_x is greater than or equal to Div_input_y[]*(power(UHF_base,(Div_q_Digits)).
+	while Div_input_x[Div_x_Digits] >= Div_mul[Div_x_Digits] do
+
+		Div_quotient[Div_q_Digits]:=Div_quotient[Div_q_Digits] + 1;
+		Sub_Digits:=Div_x_Digits + 1;
+		for Div_k:=0 to Div_x_Digits by 1 do  //compute Div_input_x[]:=Div_input_x[]-Div_input_y[]*(power(UHF_base,(Div_q_Digits)).
+			Sub_input_x[Div_k]:= Div_input_x[Div_k];
+			Sub_input_y[Div_k]:= Div_mul[Div_k];
+		end_for;
+		JSR(BigNumber_Sub);
+
+		for Div_k:= 0 to Div_x_Digits by 1 do  //Updated Div_input_x[] after subtraction.
+			Div_input_x[Div_k]:= Sub_Result[Div_k];
+		end_for;
+	
+	end_while;
+
+	for Div_i:=0 to Div_x_Digits by 1 do   //cleared before the next time call
+		Div_mul[Div_i]:= 0;
+	end_for;
+//----------------------------------------------------------------------------------
+	//compute other digit value of quotient Div_quotient[].
+	for Div_j:= Div_x_Digits to Div_y_Digits+1 by -1 do
+
+		if Div_input_x[Div_j]= Div_input_y[Div_y_Digits] then
+			Div_quotient[Div_j-Div_y_Digits-1]:= Big_base-1;
+		else
+			Div_quotient[Div_j-Div_y_Digits-1]:= (Div_input_x[Div_j] * Big_base + Div_input_x[Div_j-1]) / Div_input_y[Div_y_Digits];
+		end_if;
+	
+		while (Div_quotient[Div_j-Div_y_Digits-1]*(Div_input_y[Div_y_Digits]*Big_base+Div_input_y[Div_y_Digits-1])) > 
+			(Div_input_x[Div_j]*Big_base*Big_base+Div_input_x[Div_j-1]*Big_base+Div_input_x[Div_j-2]) do
+				Div_quotient[Div_j-Div_y_Digits-1]:= Div_quotient[Div_j-Div_y_Digits-1] - 1;
+		end_while;
+
+		//compute Div_quotient[Div_j-Div_y_sints-1]*Div_input_y[]*(power(UHF_base,(Div_j-Div_y_sints-1))
+		for Div_k:= Div_j to Div_j-Div_y_Digits-1 by -1 do  
+			Div_mul[Div_k]:= Div_input_y[Div_k-(Div_j-Div_y_Digits-1)];  //compute Div_input_y[]*(power(UHF_base,(Div_j-Div_y_sints-1)).
+		end_for;
+		for Div_k:=0 to Div_j-Div_y_Digits-2 by 1 do
+			Div_mul[Div_k]:=0;  
+		end_for;
+
+		Mul_Digits:=Div_x_Digits + 1;
+		for Div_k:=0 to Div_x_Digits by 1 do
+			Mul_input_y[Div_k]:= Div_mul[Div_k];  //assign value of Div_mul[] to Mul_input_y[]
+		end_for;
+		//	Mul_input_x[0]:= Div_quotient[Div_j-DIV_y_Digits-1];  //assign value of Div_quo[Div_j-Div_y_sints-1] to Mul_input_x[].
+		Mul_input_x[0]:= Div_quotient[Div_j-Div_y_Digits-1];
+		for Div_k:=1 to Mul_Digits-1  by 1 do
+			Mul_input_x[Div_k]:= 0;  //assign value of Div_mul[] to Mul_input_y[]
+		end_for;
+		JSR(BigNumber_Mul);
+
+		//compute Div_input_x[]-Div_quo[Div_j-Div_y_sints-1]*Div_input_y[]*(power(UHF_base,(Div_j-Div_y_sints-1)).
+		Sub_Digits:=Div_x_Digits + 1;
+		for Div_k:=0 to Div_x_Digits by 1 do
+			Sub_input_y[Div_k]:= Mul_Result[Div_k]; //assign value of Mul_Result[] to Sub_input_y[]
+		end_for;	
+		for Div_k:=0 to Div_x_Digits by 1 do
+			Sub_input_x[Div_k]:= Div_input_x[Div_k];  //assign value of Div_input_x[] to Sub_input_x[]
+		end_for;
+		JSR(BigNumber_Sub);
+
+		for Div_k:=Div_x_Digits to 0 by -1 do 
+			if Sub_Result[Div_k] <> 0 then
+				Div_sub_n:= Div_k;
+				exit;
+			end_if;
+		end_for;
+
+		for Div_k:=0 to Div_x_Digits by 1 do
+	 		Div_input_x[Div_k]:= Sub_Result[Div_k];  //print the remainder.
+		end_for;
+
+		if Div_input_x[Div_sub_n] < 0 then  //compute Div_input_x[]:= Div_input_x[]+Div_input_y[]*(power(UHF_base,(Div_j-Div_y_sints-1)).
+			Add_Digits:=Div_x_Digits + 1;
+			for Div_i:=0 to Div_x_Digits by 1 do
+				Add_input_x[Div_i]:= Sub_Result[Div_i];
+			end_for;
+			for Div_i:=0 to Div_x_Digits by 1 do
+				Add_input_y[Div_i]:= Div_mul[Div_i];
+			end_for;
+			JSR(BigNumber_Add);
+			Div_quotient[Div_j-Div_y_Digits-1]:=Div_quotient[Div_j-Div_y_Digits-1]-1;
+
+			for Div_k:=0 to Div_x_Digits by 1 do
+				Div_input_x[Div_k]:= Add_Result[Div_k];  //print the remainder.
+			end_for;
+		end_if;
+	end_for;
+	
+	for Div_i:=0 to Div_y_Digits by 1 do
+		Div_remainder[Div_i]:=Div_input_x[Div_i];
+	end_for;
+end_if;
+
+for Div_i:=0 to Div_Digits-1 by 1 do
+	Div_input_x[Div_i]:=0;
+	Div_input_y[Div_i]:=0;
+end_for;
+

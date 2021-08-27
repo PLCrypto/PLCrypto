@@ -1,0 +1,18 @@
+
+
+
+
+ JSR(UOWHF_Init);
+
+
+
+
+		Case UOWHF_Ver OF
+		0:
+			JSR(UOWHF_If256);
+		1:
+			JSR(UOWHF_If384);
+		2:
+			JSR(UOWHF_If512);
+		End_Case;
+

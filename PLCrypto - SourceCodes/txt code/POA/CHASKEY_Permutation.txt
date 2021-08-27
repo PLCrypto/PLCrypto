@@ -1,0 +1,250 @@
+
+for Chaskey_per_i:=0 to Chaskey_round by 1 do
+
+
+	Chaskey_input_pi[0]:= Chaskey_input_pi[0] + Chaskey_input_pi[1];
+
+	Chaskey_a:=Chaskey_input_pi[1];  //v1 <<< 5
+	Chaskey_Temp:=0;
+	//left shift Chaskey_b=5 bits
+	Chaskey_Temp.5:=Chaskey_a.0;
+	Chaskey_Temp.6:=Chaskey_a.1;
+	Chaskey_Temp.7:=Chaskey_a.2;
+	Chaskey_Temp.8:=Chaskey_a.3;
+	Chaskey_Temp.9:=Chaskey_a.4;
+	Chaskey_Temp.10:=Chaskey_a.5;
+	Chaskey_Temp.11:=Chaskey_a.6;
+	Chaskey_Temp.12:=Chaskey_a.7;
+	Chaskey_Temp.13:=Chaskey_a.8;
+	Chaskey_Temp.14:=Chaskey_a.9;
+	Chaskey_Temp.15:=Chaskey_a.10;
+	Chaskey_Temp.16:=Chaskey_a.11;
+	Chaskey_Temp.17:=Chaskey_a.12;
+	Chaskey_Temp.18:=Chaskey_a.13;
+	Chaskey_Temp.19:=Chaskey_a.14;
+	Chaskey_Temp.20:=Chaskey_a.15;
+	Chaskey_Temp.21:=Chaskey_a.16;
+	Chaskey_Temp.22:=Chaskey_a.17;
+	Chaskey_Temp.23:=Chaskey_a.18;
+	Chaskey_Temp.24:=Chaskey_a.19;
+	Chaskey_Temp.25:=Chaskey_a.20;
+	Chaskey_Temp.26:=Chaskey_a.21;
+	Chaskey_Temp.27:=Chaskey_a.22;
+	Chaskey_Temp.28:=Chaskey_a.23;
+	Chaskey_Temp.29:=Chaskey_a.24;
+	Chaskey_Temp.30:=Chaskey_a.25;
+	Chaskey_Temp.31:=Chaskey_a.26; 
+	Chaskey_Temp.0:=Chaskey_a.27;
+	Chaskey_Temp.1:=Chaskey_a.28;
+	Chaskey_Temp.2:=Chaskey_a.29;
+	Chaskey_Temp.3:=Chaskey_a.30;
+	Chaskey_Temp.4:=Chaskey_a.31;
+	Chaskey_input_pi[1]:=Chaskey_Temp; 
+
+	Chaskey_input_pi[1]:=Chaskey_input_pi[1] XOR Chaskey_input_pi[0];
+
+
+	Chaskey_a:=Chaskey_input_pi[0];  // <<< 16
+	Chaskey_Temp:=0;
+	//left shift Chaskey_b=16 bits
+	Chaskey_Temp.16:=Chaskey_a.0;
+	Chaskey_Temp.17:=Chaskey_a.1;
+	Chaskey_Temp.18:=Chaskey_a.2;
+	Chaskey_Temp.19:=Chaskey_a.3;
+	Chaskey_Temp.20:=Chaskey_a.4;
+	Chaskey_Temp.21:=Chaskey_a.5;
+	Chaskey_Temp.22:=Chaskey_a.6;
+	Chaskey_Temp.23:=Chaskey_a.7;
+	Chaskey_Temp.24:=Chaskey_a.8;
+	Chaskey_Temp.25:=Chaskey_a.9;
+	Chaskey_Temp.26:=Chaskey_a.10;
+	Chaskey_Temp.27:=Chaskey_a.11;
+	Chaskey_Temp.28:=Chaskey_a.12;
+	Chaskey_Temp.29:=Chaskey_a.13;
+	Chaskey_Temp.30:=Chaskey_a.14;
+	Chaskey_Temp.31:=Chaskey_a.15;
+	Chaskey_Temp.0:=Chaskey_a.16;
+	Chaskey_Temp.1:=Chaskey_a.17;
+	Chaskey_Temp.2:=Chaskey_a.18;
+	Chaskey_Temp.3:=Chaskey_a.19;
+	Chaskey_Temp.4:=Chaskey_a.20;
+	Chaskey_Temp.5:=Chaskey_a.21;
+	Chaskey_Temp.6:=Chaskey_a.22;
+	Chaskey_Temp.7:=Chaskey_a.23;
+	Chaskey_Temp.8:=Chaskey_a.24;
+	Chaskey_Temp.9:=Chaskey_a.25;
+	Chaskey_Temp.10:=Chaskey_a.26;
+	Chaskey_Temp.11:=Chaskey_a.27;
+	Chaskey_Temp.12:=Chaskey_a.28;
+	Chaskey_Temp.13:=Chaskey_a.29;
+	Chaskey_Temp.14:=Chaskey_a.30;
+	Chaskey_Temp.15:=Chaskey_a.31;
+	Chaskey_input_pi[0]:=Chaskey_Temp;
+
+
+    Chaskey_input_pi[2]:= Chaskey_input_pi[2] + Chaskey_input_pi[3];
+
+
+	Chaskey_a:=Chaskey_input_pi[3];  // <<< 8
+	Chaskey_Temp:=0;
+	//left shift Chaskey_b=8 bits
+	Chaskey_Temp.8:=Chaskey_a.0;
+	Chaskey_Temp.9:=Chaskey_a.1;
+	Chaskey_Temp.10:=Chaskey_a.2;
+	Chaskey_Temp.11:=Chaskey_a.3;
+	Chaskey_Temp.12:=Chaskey_a.4;
+	Chaskey_Temp.13:=Chaskey_a.5;
+	Chaskey_Temp.14:=Chaskey_a.6;
+	Chaskey_Temp.15:=Chaskey_a.7;
+	Chaskey_Temp.16:=Chaskey_a.8;
+	Chaskey_Temp.17:=Chaskey_a.9;
+	Chaskey_Temp.18:=Chaskey_a.10;
+	Chaskey_Temp.19:=Chaskey_a.11;
+	Chaskey_Temp.20:=Chaskey_a.12;
+	Chaskey_Temp.21:=Chaskey_a.13;
+	Chaskey_Temp.22:=Chaskey_a.14;
+	Chaskey_Temp.23:=Chaskey_a.15;
+	Chaskey_Temp.24:=Chaskey_a.16;
+	Chaskey_Temp.25:=Chaskey_a.17;
+	Chaskey_Temp.26:=Chaskey_a.18;
+	Chaskey_Temp.27:=Chaskey_a.19;
+	Chaskey_Temp.28:=Chaskey_a.20;
+	Chaskey_Temp.29:=Chaskey_a.21;
+	Chaskey_Temp.30:=Chaskey_a.22;
+	Chaskey_Temp.31:=Chaskey_a.23;
+	Chaskey_Temp.0:=Chaskey_a.24;
+	Chaskey_Temp.1:=Chaskey_a.25;
+	Chaskey_Temp.2:=Chaskey_a.26;
+	Chaskey_Temp.3:=Chaskey_a.27;
+	Chaskey_Temp.4:=Chaskey_a.28;
+	Chaskey_Temp.5:=Chaskey_a.29;
+	Chaskey_Temp.6:=Chaskey_a.30;
+	Chaskey_Temp.7:=Chaskey_a.31;
+	Chaskey_input_pi[3]:=Chaskey_Temp;
+
+	Chaskey_input_pi[3]:=Chaskey_input_pi[3] XOR Chaskey_input_pi[2];
+
+
+
+	Chaskey_input_pi[0]:= Chaskey_input_pi[0] + Chaskey_input_pi[3];
+
+	Chaskey_a:=Chaskey_input_pi[3];  //<<< 13
+	Chaskey_Temp:=0;
+	//left shift Chaskey_b=13 bits
+	Chaskey_Temp.13:=Chaskey_a.0;
+	Chaskey_Temp.14:=Chaskey_a.1;
+	Chaskey_Temp.15:=Chaskey_a.2;
+	Chaskey_Temp.16:=Chaskey_a.3;
+	Chaskey_Temp.17:=Chaskey_a.4;
+	Chaskey_Temp.18:=Chaskey_a.5;
+	Chaskey_Temp.19:=Chaskey_a.6;
+	Chaskey_Temp.20:=Chaskey_a.7;
+	Chaskey_Temp.21:=Chaskey_a.8;
+	Chaskey_Temp.22:=Chaskey_a.9;
+	Chaskey_Temp.23:=Chaskey_a.10;
+	Chaskey_Temp.24:=Chaskey_a.11;
+	Chaskey_Temp.25:=Chaskey_a.12;
+	Chaskey_Temp.26:=Chaskey_a.13;
+	Chaskey_Temp.27:=Chaskey_a.14;
+	Chaskey_Temp.28:=Chaskey_a.15;
+	Chaskey_Temp.29:=Chaskey_a.16;
+	Chaskey_Temp.30:=Chaskey_a.17;
+	Chaskey_Temp.31:=Chaskey_a.18;
+	Chaskey_Temp.0:=Chaskey_a.19;
+	Chaskey_Temp.1:=Chaskey_a.20;
+	Chaskey_Temp.2:=Chaskey_a.21;
+	Chaskey_Temp.3:=Chaskey_a.22;
+	Chaskey_Temp.4:=Chaskey_a.23;
+	Chaskey_Temp.5:=Chaskey_a.24;
+	Chaskey_Temp.6:=Chaskey_a.25;
+	Chaskey_Temp.7:=Chaskey_a.26;
+	Chaskey_Temp.8:=Chaskey_a.27;
+	Chaskey_Temp.9:=Chaskey_a.28;
+	Chaskey_Temp.10:=Chaskey_a.29;
+	Chaskey_Temp.11:=Chaskey_a.30;
+	Chaskey_Temp.12:=Chaskey_a.31;
+	Chaskey_input_pi[3]:=Chaskey_Temp;
+
+	Chaskey_input_pi[3]:=Chaskey_input_pi[3] XOR Chaskey_input_pi[0];
+
+
+	Chaskey_input_pi[2]:=  Chaskey_input_pi[2] + Chaskey_input_pi[1];
+
+	Chaskey_a:=Chaskey_input_pi[1]; //<<< 7
+	Chaskey_Temp:=0;
+	//left shift Chaskey_b=7 bits
+	Chaskey_Temp.7:=Chaskey_a.0;
+	Chaskey_Temp.8:=Chaskey_a.1;
+	Chaskey_Temp.9:=Chaskey_a.2;
+	Chaskey_Temp.10:=Chaskey_a.3;
+	Chaskey_Temp.11:=Chaskey_a.4;
+	Chaskey_Temp.12:=Chaskey_a.5;
+	Chaskey_Temp.13:=Chaskey_a.6;
+	Chaskey_Temp.14:=Chaskey_a.7;
+	Chaskey_Temp.15:=Chaskey_a.8;
+	Chaskey_Temp.16:=Chaskey_a.9;
+	Chaskey_Temp.17:=Chaskey_a.10;
+	Chaskey_Temp.18:=Chaskey_a.11;
+	Chaskey_Temp.19:=Chaskey_a.12;
+	Chaskey_Temp.20:=Chaskey_a.13;
+	Chaskey_Temp.21:=Chaskey_a.14;
+	Chaskey_Temp.22:=Chaskey_a.15;
+	Chaskey_Temp.23:=Chaskey_a.16;
+	Chaskey_Temp.24:=Chaskey_a.17;
+	Chaskey_Temp.25:=Chaskey_a.18;
+	Chaskey_Temp.26:=Chaskey_a.19;
+	Chaskey_Temp.27:=Chaskey_a.20;
+	Chaskey_Temp.28:=Chaskey_a.21;
+	Chaskey_Temp.29:=Chaskey_a.22;
+	Chaskey_Temp.30:=Chaskey_a.23;
+	Chaskey_Temp.31:=Chaskey_a.24;
+	Chaskey_Temp.0:=Chaskey_a.25;
+	Chaskey_Temp.1:=Chaskey_a.26;
+	Chaskey_Temp.2:=Chaskey_a.27;
+	Chaskey_Temp.3:=Chaskey_a.28;
+	Chaskey_Temp.4:=Chaskey_a.29;
+	Chaskey_Temp.5:=Chaskey_a.30;
+	Chaskey_Temp.6:=Chaskey_a.31;
+	Chaskey_input_pi[1]:=Chaskey_Temp;
+
+	Chaskey_input_pi[1]:=Chaskey_input_pi[1] XOR Chaskey_input_pi[2]; 
+
+
+	Chaskey_a:=Chaskey_input_pi[2];   //<<< 16
+	Chaskey_Temp:=0;
+	//left shift Chaskey_b=16 bits
+	Chaskey_Temp.16:=Chaskey_a.0;
+	Chaskey_Temp.17:=Chaskey_a.1;
+	Chaskey_Temp.18:=Chaskey_a.2;
+	Chaskey_Temp.19:=Chaskey_a.3;
+	Chaskey_Temp.20:=Chaskey_a.4;
+	Chaskey_Temp.21:=Chaskey_a.5;
+	Chaskey_Temp.22:=Chaskey_a.6;
+	Chaskey_Temp.23:=Chaskey_a.7;
+	Chaskey_Temp.24:=Chaskey_a.8;
+	Chaskey_Temp.25:=Chaskey_a.9;
+	Chaskey_Temp.26:=Chaskey_a.10;
+	Chaskey_Temp.27:=Chaskey_a.11;
+	Chaskey_Temp.28:=Chaskey_a.12;
+	Chaskey_Temp.29:=Chaskey_a.13;
+	Chaskey_Temp.30:=Chaskey_a.14;
+	Chaskey_Temp.31:=Chaskey_a.15;
+	Chaskey_Temp.0:=Chaskey_a.16;
+	Chaskey_Temp.1:=Chaskey_a.17;
+	Chaskey_Temp.2:=Chaskey_a.18;
+	Chaskey_Temp.3:=Chaskey_a.19;
+	Chaskey_Temp.4:=Chaskey_a.20;
+	Chaskey_Temp.5:=Chaskey_a.21;
+	Chaskey_Temp.6:=Chaskey_a.22;
+	Chaskey_Temp.7:=Chaskey_a.23;
+	Chaskey_Temp.8:=Chaskey_a.24;
+	Chaskey_Temp.9:=Chaskey_a.25;
+	Chaskey_Temp.10:=Chaskey_a.26;
+	Chaskey_Temp.11:=Chaskey_a.27;
+	Chaskey_Temp.12:=Chaskey_a.28;
+	Chaskey_Temp.13:=Chaskey_a.29;
+	Chaskey_Temp.14:=Chaskey_a.30;
+	Chaskey_Temp.15:=Chaskey_a.31;
+	Chaskey_input_pi[2]:=Chaskey_Temp; 
+end_for;
+

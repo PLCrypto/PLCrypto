@@ -1,0 +1,34 @@
+(*
+void Squeeze(byte state[D][D], byte*digest)
+{
+	int i = 0;
+	while(1){
+
+		WordToByte(state, digest, i, min(RATEP, DIGESTSIZE-i));
+		i += RATEP;
+		if(i >= DIGESTSIZE) break;
+		Permutation(state, ROUND);
+	}
+}
+*)
+
+PHT_Squeeze_i:=0;
+
+PHT_Squeeze_tmp:=2;
+while PHT_Squeeze_tmp>1 do
+
+	PHT_WordToByte_BitOffSet:= PHT_Squeeze_i;
+	PHT_WordToByte_NoOfBits:= PHT_DIGESTSIZE-PHT_Squeeze_i;
+	if PHT_WordToByte_NoOfBits > PHT_RATEP then
+		PHT_WordToByte_NoOfBits:= PHT_RATEP;
+	end_if;
+	JSR(PHOTON_WordToByte);
+
+	PHT_Squeeze_i:=PHT_Squeeze_i+PHT_RATEP;
+
+	if PHT_Squeeze_i >= PHT_DIGESTSIZE then
+		exit;
+	end_if;
+
+	JSR(PHOTON_Permutation);
+end_while;

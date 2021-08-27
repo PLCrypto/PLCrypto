@@ -1,0 +1,40 @@
+
+
+JSR(PHOTON_Init);
+
+PHT_isPadding:=0;
+
+PHT_MessIndex:=0;
+while PHT_MessIndex <= PHT_BitLen - PHT_RATE do
+	
+	PHT_CompressFunction_BitOffSet:=PHT_MessIndex;
+	JSR(PHOTON_CompressFunction);
+
+	PHT_MessIndex:=PHT_MessIndex + PHT_RATE;
+end_while;
+
+
+PHT_Ceilmod:=PHT_BitLen-PHT_MessIndex;
+PHT_Padded_bound:=PHT_Ceilmod/8;
+PHT_Ceilmod:= PHT_Ceilmod Mod 8;
+if PHT_Ceilmod<>0 then
+	PHT_Padded_bound:=PHT_Padded_bound+1;
+end_if;
+ 
+
+PHT_hash_index:=PHT_MessIndex/8;
+
+for PHT_i:=0 to PHT_Padded_bound-1 by 1 do
+	PHT_Padded[PHT_i]:=PHT_Message[PHT_hash_index + PHT_i];
+end_for;
+PHT_Padded[PHT_i]:=16#80;
+
+PHT_isPadding:=1;
+
+
+
+PHT_CompressFunction_BitOffSet:=PHT_MessIndex and 16#07;
+JSR(PHOTON_CompressFunction);
+
+
+JSR(PHOTON_Squeeze);

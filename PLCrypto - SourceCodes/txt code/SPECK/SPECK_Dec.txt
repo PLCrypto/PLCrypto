@@ -1,0 +1,72 @@
+
+JSR(SPECK_Init);
+
+
+Case Speck_Ver Of
+
+0,1,2:
+	Speck_Ciphertext[0,0]:=Speck_Plaintext[0,0];
+	Speck_Ciphertext[1,0]:=Speck_Plaintext[1,0];
+
+	For Speck_i:=0 to Speck_Rd_Max by 1 do
+		Speck_SR_m[0]:=Speck_Ciphertext[1,0];
+		JSR(SPECK_Rotate_Right_Enc);       //c1>>>>
+		
+		if Speck_Ver=0 Then
+			Speck_Ciphertext[1,0]:= (Speck_Rotate_Result[0] + Speck_Ciphertext[0,0]) XOR Speck_Round_Keys[Speck_i,0];
+			Speck_Ciphertext[1,0]:= Speck_Ciphertext[1,0] AND 16#0000ffff;
+		Else
+			Speck_AS_X[0]:=Speck_Rotate_Result[0];
+			Speck_AS_Y[0]:=Speck_Ciphertext[0,0];
+			JSR(SPECK_Add);
+			Speck_Ciphertext[1,0]:= Speck_AS_res[0] XOR Speck_Round_Keys[Speck_i,0];
+		End_if;
+
+		
+		Speck_SR_m[0]:=Speck_Ciphertext[0,0];
+		JSR(SPECK_Rotate_Left_Enc);   //p0<<<
+		Speck_Ciphertext[0,0]:=Speck_Rotate_Result[0] XOR Speck_Ciphertext[1,0];
+	End_for;
+
+3,4,5:
+	Speck_Ciphertext[0,0]:=Speck_Plaintext[0,0];
+	Speck_Ciphertext[0,1]:=Speck_Plaintext[0,1];
+	Speck_Ciphertext[1,0]:=Speck_Plaintext[1,0];
+	Speck_Ciphertext[1,1]:=Speck_Plaintext[1,1];
+
+	For Speck_i:=0 to Speck_Rd_Max by 1 do
+		Speck_SR_m[0]:=Speck_Ciphertext[1,0];
+		Speck_SR_m[1]:=Speck_Ciphertext[1,1];
+		JSR(SPECK_Rotate_Right_Enc);       //c1>>>>
+		
+
+
+		
+		Speck_AS_X[0]:=Speck_Rotate_Result[0];
+		Speck_AS_X[1]:=Speck_Rotate_Result[1];
+		Speck_AS_Y[0]:=Speck_Ciphertext[0,0];
+		Speck_AS_Y[1]:=Speck_Ciphertext[0,1];
+		JSR(SPECK_Add);
+		Speck_Ciphertext[1,0]:= Speck_AS_res[0] XOR Speck_Round_Keys[Speck_i,0];
+	 	Speck_Ciphertext[1,1]:= Speck_AS_res[1] XOR Speck_Round_Keys[Speck_i,1];
+
+
+		Speck_SR_m[0]:=Speck_Ciphertext[0,0];
+		Speck_SR_m[1]:=Speck_Ciphertext[0,1];
+		JSR(SPECK_Rotate_Left_Enc);   //c0<<<
+		Speck_Ciphertext[0,0]:=Speck_Rotate_Result[0] XOR Speck_Ciphertext[1,0];
+		Speck_Ciphertext[0,1]:=Speck_Rotate_Result[1] XOR Speck_Ciphertext[1,1];
+	End_for;
+
+End_Case;
+
+
+
+
+
+JSR(SPECK_ClearKey);
+
+
+
+
+

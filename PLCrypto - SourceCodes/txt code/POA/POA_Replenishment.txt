@@ -1,0 +1,99 @@
+
+JSR(POA_ReInit);
+
+
+//compute all the tail of each OWF chain.
+
+for POA_m:=0 to 255 by 1 do 
+//POA_k:=0 to POA_SC_Interval*255 by POA_SC_Interval do  
+	//use PRG to generate the head node
+	PRG_Counter[0]:= POA_Ins_NM;
+	PRG_Counter[1]:= POA_Chain_NM + POA_lr;
+
+	JSR(PRG_PRF_CHASKEY);
+
+	for POA_i:=0 to 8 by 1 do   //256-bits result of MAC assign to checkpoint.
+		
+		//POA_CKP[POA_i]:=PRG_Result[POA_i];
+		POA_CKP[POA_i]:=65535;
+		
+	end_for;
+
+	OWF_Input[0]:=POA_CKP[0];
+	OWF_Input[1]:=POA_CKP[1];
+	OWF_Input[2]:=POA_CKP[2];
+	OWF_Input[3]:=POA_CKP[3];
+	OWF_Input[4]:=POA_CKP[4];
+	OWF_Input[5]:=POA_CKP[5];
+	OWF_Input[6]:=POA_CKP[6];
+	OWF_Input[7]:=POA_CKP[7];
+	OWF_Input[8]:=POA_CKP[8];
+
+	for POA_j:=0 to POA_Pf_Indx by 1 do   //compute the tail of one OWF chain.
+		JSR(Improved_OWF);
+		OWF_Input[0]:=OWF_Result[0];
+		OWF_Input[1]:=OWF_Result[1];
+		OWF_Input[2]:=OWF_Result[2];
+		OWF_Input[3]:=OWF_Result[3];
+		OWF_Input[4]:=OWF_Result[4];
+		OWF_Input[5]:=OWF_Result[5];
+		OWF_Input[6]:=OWF_Result[6];
+		OWF_Input[7]:=OWF_Result[7];
+		OWF_Input[8]:=POA_CKP[8];
+	end_for;
+
+	for POA_j:=0 to 8 by 1 do  //store all the tail.
+		POA_Vrf_Points[POA_m,POA_j]:= OWF_Result[POA_j];
+	end_for;
+	POA_Chain_NM:=POA_Chain_NM+POA_SC_Interval;
+
+end_for;
+
+
+//all tail as input message, compute the hash of all tail.
+UOWHF_Vary_MsgLen:=2047;  //256*8 Dints
+for POA_j:=0 to 255 by 1 do   //assign the tail value to Hash_Msg[].
+	for POA_i:=0 to 8 by 1 do
+		UOWHF_Vary_Message[POA_i+8*POA_j]:=POA_Vrf_Points[POA_j,POA_i];
+	end_for;
+end_for;
+JSR(UOWHF_Vary);  //gain the Hash result with 128 bits.
+
+
+
+
+// compute OTS using the heads of the last protocol instance...................
+POA_k:=0;
+POA_SIG_i:=0;
+for POA_i:=0 to 3 by 1 do
+	for POA_j:=0 to 31 by 1 do
+		if OWF_Result[POA_i].[POA_j] then  //if bit is 1, choose the second head as sk.
+			PRG_Counter[0]:= POA_Ins_NM-1;
+			PRG_Counter[1]:= 2*POA_k+POA_SC_Interval + POA_lr;
+
+			JSR(PRG_PRF_CHASKEY);
+
+
+		else
+			PRG_Counter[0]:= POA_Ins_NM-1;
+			PRG_Counter[1]:= 2*POA_k + POA_lr;
+
+			JSR(PRG_PRF_CHASKEY);
+		end_if;
+
+		for POA_m:=0 to 7 by 1 do
+			POA_OTS[POA_SIG_i,POA_m]:=PRG_Result[POA_m]; //store all the result of OTS.
+		end_for;
+	POA_k:=POA_k+POA_SC_Interval;
+	POA_SIG_i:=POA_SIG_i+1;
+	end_for;
+end_for;
+
+
+// clear the credentials
+for POA_j:=0 to 8 by 1 do	
+	POA_CKP[POA_j]:=0;
+	PRG_Result[POA_j]:=0;
+end_for;
+
+

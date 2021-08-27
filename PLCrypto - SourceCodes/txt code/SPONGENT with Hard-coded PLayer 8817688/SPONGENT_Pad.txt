@@ -1,0 +1,78 @@
+(*
+HashReturn Pad(hashState *state)			
+{
+        int byteind = state->remainingbitlen/8; /* byte index of remaining byte */
+        int bitpos = state->remainingbitlen%8; /* bit position in last byte */
+        
+        /* make unoccupied bits 0 */
+        if(bitpos)
+                state->messageblock[byteind] &= 0xFF<<(8-bitpos);       
+
+        /* add single 1-bit */
+        if(bitpos){             
+                state->messageblock[byteind] |= 0x80>>(bitpos);}
+        else{
+                state->messageblock[byteind] = 0x80;}
+        
+        /* add 0-bits until we have rate bits */
+        while(byteind!=R_SizeInBytes)
+        {
+                byteind++;
+                state->messageblock[byteind] = 0;
+        }
+        return SUCCESS;
+}
+
+*)
+	Spon_Pad_byteind:= Spon_remainingbitlen/8;
+	Spon_Pad_bitpos:= Spon_remainingbitlen mod 8;
+	if Spon_Pad_bitpos<> 0 then
+		Spon_Pad_indx:= 8-Spon_Pad_bitpos;
+		Case Spon_Pad_indx of 
+			1: 
+				Spon_messageblock[Spon_Pad_byteind]:= Spon_messageblock[Spon_Pad_byteind] and 16#1fe;
+			2: 
+				Spon_messageblock[Spon_Pad_byteind]:= Spon_messageblock[Spon_Pad_byteind] and 16#3fc;
+			3: 
+				Spon_messageblock[Spon_Pad_byteind]:= Spon_messageblock[Spon_Pad_byteind] and 16#7fb;
+			4:
+				Spon_messageblock[Spon_Pad_byteind]:= Spon_messageblock[Spon_Pad_byteind] and 16#FF0;
+			5: 
+				Spon_messageblock[Spon_Pad_byteind]:= Spon_messageblock[Spon_Pad_byteind] and 16#1fe0;
+			6: 
+				Spon_messageblock[Spon_Pad_byteind]:= Spon_messageblock[Spon_Pad_byteind] and 16#3fc0;
+			7: 
+				Spon_messageblock[Spon_Pad_byteind]:= Spon_messageblock[Spon_Pad_byteind] and 16#7F80;
+			8: 
+				Spon_messageblock[Spon_Pad_byteind]:= Spon_messageblock[Spon_Pad_byteind] and 16#FF00;		
+		End_case;
+	
+	End_if;
+
+	
+	if Spon_Pad_bitpos<> 0 then
+		 
+		Case Spon_Pad_bitpos of 
+			0:Spon_messageblock[Spon_Pad_byteind]:= Spon_messageblock[Spon_Pad_byteind] or 128;
+			1: Spon_messageblock[Spon_Pad_byteind]:= Spon_messageblock[Spon_Pad_byteind] or 64;
+			2: Spon_messageblock[Spon_Pad_byteind]:= Spon_messageblock[Spon_Pad_byteind] or 32;
+			3: 
+				Spon_messageblock[Spon_Pad_byteind]:= Spon_messageblock[Spon_Pad_byteind] or 16;
+			4: 
+				Spon_messageblock[Spon_Pad_byteind]:= Spon_messageblock[Spon_Pad_byteind] or 16#8;
+			5: 
+				Spon_messageblock[Spon_Pad_byteind]:= Spon_messageblock[Spon_Pad_byteind] or 4;
+			6:
+			Spon_messageblock[Spon_Pad_byteind] := Spon_messageblock[Spon_Pad_byteind] or 16#2;
+			7: 
+				Spon_messageblock[Spon_Pad_byteind]:= Spon_messageblock[Spon_Pad_byteind] or 16#1;			
+		End_case;
+	else
+		Spon_messageblock[Spon_Pad_byteind]:= 16#80;
+	end_if;
+
+	 while Spon_Pad_byteind<>Spon_R_SizeInBytes do
+        
+                Spon_Pad_byteind:=Spon_Pad_byteind+1;
+                Spon_messageblock[Spon_Pad_byteind] := 0;
+	end_while;

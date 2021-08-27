@@ -1,0 +1,18 @@
+(*
+HashReturn Squeeze(hashState *state)
+{
+	memcpy(state->messageblock, state->value, R_SizeInBytes);
+		
+	Permute(state);
+	
+	return SUCCESS;
+}
+
+*)
+
+For Spon_Squeeze_i:=0 to Spon_R_SizeInBytes-1 by 1 Do
+
+	Spon_messageblock[Spon_Squeeze_i]:= Spon_State[Spon_Squeeze_i];
+End_for;
+
+	jsr(SPONGENT_Permute);

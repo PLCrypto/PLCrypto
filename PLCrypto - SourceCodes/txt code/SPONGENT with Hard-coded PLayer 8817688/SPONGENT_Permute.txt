@@ -1,0 +1,64 @@
+(*
+void Permute(hashState *state)
+{
+	bit16	i, j, IV, INV_IV;
+	for(i = 0; i < nRounds; i++){
+//Spon_State[1]:=0;
+		/* Add counter values */
+		state->value[0]			^= Spon_IV& 16#FF;
+		state->value[1]			^= (IV / 256) & 16#FF;
+		INV_IV	= retnuoCl(IV);
+		state->value[nSBox-1]	^= (INV_IV / 256) & 16#FF;;
+		state->value[nSBox-2]	^= INV_IV & 16#FF;		
+		IV	= lCounter(IV);
+		
+		/* sBoxLayer layer */
+		for ( j=0; j < nSBox; j++)	
+			state->value[j] =  sBoxLayer[state->value[j]];
+		/* pLayer */
+		pLayer(state);
+	}
+}
+*)
+/*
+Case Spon_Ver Of
+		88808:	
+			Spon_IV := 16#05;
+		8817688:	
+			Spon_IV := 16#C6;
+		   1281288:	 Spon_IV:= 16#7A;	
+		 128256128:	 Spon_IV:= 16#FB;	
+		  16016016:	 Spon_IV:= 16#45;	
+		  16016080:	 Spon_IV:= 16#01;	
+		 160320160:	 Spon_IV:= 16#A7;	
+		  22422416:	 Spon_IV:= 16#01;	
+		 224224112:	 Spon_IV:= 16#52;	
+		 224448224:	 Spon_IV:= 16#105; 	
+		  25625616:	 Spon_IV:= 16#9e;	
+		 256256128:	 Spon_IV:= 16#fb;	
+		 256512256:	 Spon_IV:= 16#015;	
+End_case;
+*/
+
+For Spon_Permute_i:=0 to Spon_nRounds-1 by 1 Do
+	Spon_State[0]:=Spon_State[0] XOR Spon_IV[Spon_Permute_i];
+	//Spon_State[1]:=Spon_State[1] XOR ((Spon_IV[Spon_Permute_i]/256) And 16#FF);
+	
+	Spon_State[Spon_nSBox-1]:=Spon_State[Spon_nSBox-1] XOR ((Spon_INV_IV[Spon_Permute_i]/256) And 16#FF);
+	Spon_State[Spon_nSBox-2]:=Spon_State[Spon_nSBox-2] XOR ((Spon_INV_IV[Spon_Permute_i]) And 16#FF);
+	 
+ 
+	
+		/*sLayer */
+	for Spon_Permute_j:=0 to Spon_nSBox-1 by 1 Do
+		
+		Spon_Slayer_input:= Spon_State[Spon_Permute_j];
+		Spon_State[Spon_Permute_j]:=Spon_SBoxLayer[Spon_Slayer_input];
+
+	End_for;
+	
+	
+		/* pLayer */
+	jsr(SPONGENT_PLayer);
+
+End_For;

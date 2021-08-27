@@ -1,0 +1,11 @@
+If S:FS Then
+	
+	PRG_Counter[0]:=5;
+	PRG_Counter[1]:=1;
+
+
+End_if;
+
+
+JSR(PRG_PRF_SIMON);
+

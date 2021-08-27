@@ -1,0 +1,15 @@
+
+ JSR(OWF_Init);
+
+
+
+
+		Case OWF_Ver OF
+		0:
+			JSR(If256);
+		1:
+			JSR(If384);
+		2:
+			JSR(If512);
+		End_Case;
+

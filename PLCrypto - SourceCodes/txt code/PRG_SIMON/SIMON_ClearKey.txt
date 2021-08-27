@@ -1,0 +1,23 @@
+Case Simon_Ver Of
+
+0,1,2:
+	For Simon_i:=0 to Simon_Rd_Max by 1 do 
+		Simon_Round_Keys[Simon_i,0]:=0;
+	End_For;
+	Simon_tmp1[0]:=0;
+	Simon_tmp2[0]:=0;
+	Simon_Rotate_Result[0]:=0;
+3,4,5:
+	For Simon_i:=0 to Simon_Rd_Max by 1 do 
+		Simon_Round_Keys[Simon_i,0]:=0;
+		Simon_Round_Keys[Simon_i,1]:=0;
+	End_For;
+	Simon_tmp1[0]:=0;
+	Simon_tmp1[1]:=0;
+	Simon_tmp2[0]:=0;
+	Simon_tmp2[1]:=0;
+	Simon_Rotate_Result[0]:=0;
+	Simon_Rotate_Result[1]:=0;
+End_Case;
+	
+	

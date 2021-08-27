@@ -1,0 +1,86 @@
+JSR(SPONGENT_Init);
+
+
+
+//Spon_hashval, state 
+
+
+ 
+
+/* Absorb available message blocks */
+Spon_Hash_statrIndex:=0;
+While Spon_MsgBitLen >= Spon_rate do
+	//memcpy(state.messageblock, data, R_SizeInBytes);
+	for Spon_Hash_i:=0 to Spon_R_SizeInBytes-1 by 1 do
+		Spon_messageblock[Spon_Hash_i]:=Spon_Message[Spon_Hash_statrIndex+Spon_Hash_i];
+	end_for;
+
+	
+	JSR(SPONGENT_Absorb);
+	Spon_MsgBitLen:=Spon_MsgBitLen-Spon_rate;
+	Spon_Hash_statrIndex:=Spon_Hash_statrIndex+Spon_R_SizeInBytes;
+
+end_while;
+
+
+
+//databitlen/8 + (databitlen%8?1:0)
+Spon_Hash_index:=Spon_MsgBitLen mod 8;
+if Spon_Hash_index=0 then
+	Spon_Hash_index:=Spon_MsgBitLen / 8;
+else
+	Spon_Hash_index:=Spon_MsgBitLen / 8 + 1;
+end_if;
+
+if Spon_MsgBitLen>0 then
+//memcpy(state.messageblock, data, databitlen/8 + (databitlen%8?1:0));
+	for Spon_Hash_i:=0 to Spon_Hash_index-1 by 1 do
+		Spon_messageblock[Spon_Hash_i]:=Spon_Message[Spon_Hash_statrIndex+Spon_Hash_i];
+	end_for;
+	Spon_remainingbitlen:=Spon_MsgBitLen;
+else
+	for Spon_Hash_i:=0 to Spon_R_SizeInBytes-1 by 1 do
+		Spon_messageblock[Spon_Hash_i]:=0;
+	end_for;
+	Spon_remainingbitlen:=Spon_MsgBitLen;
+end_if;
+
+
+JSR(SPONGENT_Pad);
+
+JSR(SPONGENT_Absorb);
+Spon_hashbitlen:=Spon_hashbitlen+Spon_rate;
+
+/* Squeeze data blocks */	
+Spon_Hash_statrIndex:=0;
+while Spon_hashbitlen<Spon_DIGESTSIZE do
+	JSR(SPONGENT_Squeeze);
+	
+	
+	for Spon_Hash_i:=0 to Spon_R_SizeInBytes-1 by 1 do
+		Spon_Digest[Spon_Hash_statrIndex+Spon_Hash_i]:=Spon_messageblock[Spon_Hash_i];
+	end_for;
+
+	Spon_hashbitlen:=Spon_hashbitlen+Spon_rate;
+	Spon_Hash_statrIndex:=Spon_Hash_statrIndex+Spon_R_SizeInBytes;
+	 
+end_while;
+
+
+
+for Spon_Hash_i:=0 to Spon_R_SizeInBytes-1 by 1 do
+	Spon_Digest[Spon_Hash_statrIndex+Spon_Hash_i]:=Spon_State[Spon_Hash_i];
+end_for;
+
+
+
+
+
+
+
+
+
+
+
+
+	

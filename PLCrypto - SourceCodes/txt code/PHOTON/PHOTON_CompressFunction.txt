@@ -1,0 +1,9 @@
+
+PHT_WordXorByte_NoOfBits:=PHT_RATE;
+PHT_WordXorByte_WordOffset:=0;
+PHT_WordXorByte_BitOffSet:= PHT_CompressFunction_BitOffSet;
+
+JSR(PHOTON_WordXorByte);
+
+
+JSR(PHOTON_Permutation);

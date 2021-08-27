@@ -1,0 +1,138 @@
+	(*
+/* ensure NoOfBits <=8 */
+void WriteByte(byte*str, byte value, int BitOffSet, int NoOfBits)
+{
+	int ByteIndex = BitOffSet >> 3;
+	int BitIndex = BitOffSet & 0x7;
+	byte localFilter = (((byte)1)<<NoOfBits) - 1;
+	value &= localFilter;
+	if(BitIndex+ NoOfBits <= 8) {
+		str[ByteIndex] &= ~(localFilter<<(8-BitIndex-NoOfBits));
+		str[ByteIndex] |= value<<(8-BitIndex-NoOfBits);
+	}
+	else {
+		u32 tmp = ((((u32) str[ByteIndex])<<8)&0xFF00) | (((u32) str[ByteIndex+1])&0xFF);
+		tmp &= ~((((u32)localFilter)&0xFF)<<(16-BitIndex-NoOfBits));
+		tmp |= (((u32)(value))&0xFF)<<(16-BitIndex-NoOfBits);
+		str[ByteIndex] = (tmp>>8)&0xFF;
+		str[ByteIndex+1] = tmp&0xFF;
+	}
+}*)
+	// ByteIndex = BitOffSet >> 3;
+	PHT_Byte_indxi:=PHT_WriteByte_BitOffset/8;
+	//BitIndex = BitOffSet & 0x7;
+	PHT_Bit_indxj:=PHT_WriteByte_BitOffset AND 16#7;
+	//localFilter = (((byte)1)<<NoOfBits) - 1;
+	PHT_WriteByte_LocalFilter:=0;
+	PHT_WriteByte_LocalFilter.[PHT_WriteByte_NoOfBits]:=1;
+	PHT_WriteByte_LocalFilter:=PHT_WriteByte_LocalFilter-1;
+
+	PHT_WriteByte_Value:= PHT_WriteByte_Value AND PHT_WriteByte_LocalFilter;
+
+	If PHT_Bit_indxj+ PHT_WriteByte_NoOfBits <=8 Then
+		
+		PHT_Tmp[1]:= 8-PHT_Bit_indxj-PHT_WriteByte_NoOfBits; 
+		CASE PHT_Tmp[1] OF
+			1:
+				PHT_WriteByte_LocalFilter:=PHT_WriteByte_LocalFilter*2;
+				PHT_WriteByte_Value:=PHT_WriteByte_Value*2;
+			2:
+				PHT_WriteByte_LocalFilter:=PHT_WriteByte_LocalFilter*4;
+				PHT_WriteByte_Value:=PHT_WriteByte_Value*4;
+
+			3:
+				PHT_WriteByte_LocalFilter:=PHT_WriteByte_LocalFilter*8;
+				PHT_WriteByte_Value:=PHT_WriteByte_Value*8;
+			4:
+				PHT_WriteByte_LocalFilter:=PHT_WriteByte_LocalFilter*16;
+				PHT_WriteByte_Value:=PHT_WriteByte_Value*16;
+			5:
+				PHT_WriteByte_LocalFilter:=PHT_WriteByte_LocalFilter*32;
+				PHT_WriteByte_Value:=PHT_WriteByte_Value*32;
+			6:
+				PHT_WriteByte_LocalFilter:=PHT_WriteByte_LocalFilter*64;
+				PHT_WriteByte_Value:=PHT_WriteByte_Value*64;
+			7:
+				PHT_WriteByte_LocalFilter:=PHT_WriteByte_LocalFilter*128;
+				PHT_WriteByte_Value:=PHT_WriteByte_Value*128;
+			8:
+				PHT_WriteByte_LocalFilter:=PHT_WriteByte_LocalFilter*256;
+				PHT_WriteByte_Value:=PHT_WriteByte_Value*256;
+		End_Case;
+		//Digest[ByteIndex] &= ~(localFilter<<(8-BitIndex-NoOfBits));
+		//Digest[ByteIndex] |= value<<(8-BitIndex-NoOfBits
+			PHT_WriteByte_LocalFilter:=(NOT PHT_WriteByte_LocalFilter) ;
+			PHT_Digest[PHT_Byte_indxi]:= PHT_Digest[PHT_Byte_indxi] AND PHT_WriteByte_LocalFilter;
+			PHT_Digest[PHT_Byte_indxi]:= PHT_Digest[PHT_Byte_indxi] OR PHT_WriteByte_Value;
+
+
+	Else
+		//u32 tmp = ((((u32) str[ByteIndex])<<8)&0xFF00) | (((u32) str[ByteIndex+1])&0xFF);
+		//tmp &= ~((((u32)localFilter)&0xFF)<<(16-BitIndex-NoOfBits));
+		//tmp |= (((u32)(value))&0xFF)<<(16-BitIndex-NoOfBits);
+	
+		PHT_Tmp[0]:= ((PHT_Digest[PHT_Byte_indxi]*256) AND 16#FF00) OR (PHT_Digest[PHT_Byte_indxi+1] AND 16#FF);
+		PHT_Tmp[1]:= 16-PHT_Bit_indxj-PHT_WriteByte_NoOfBits;
+		Case PHT_Tmp[1] Of
+				1:
+					PHT_Tmp[0]:=PHT_Tmp[0] AND (NOT ((PHT_WriteByte_LocalFilter AND 16#FF)* 2));
+					PHT_Tmp[0]:=PHT_Tmp[0] OR ((PHT_WriteByte_Value AND 16#FF)* 2);
+				2:
+					PHT_Tmp[0]:=PHT_Tmp[0] AND (NOT ((PHT_WriteByte_LocalFilter AND 16#FF)* 4));
+					PHT_Tmp[0]:=PHT_Tmp[0] OR ((PHT_WriteByte_Value AND 16#FF)* 4);
+				3:
+					PHT_Tmp[0]:=PHT_Tmp[0] AND (NOT ((PHT_WriteByte_LocalFilter AND 16#FF)* 8));
+					PHT_Tmp[0]:=PHT_Tmp[0] OR ((PHT_WriteByte_Value AND 16#FF)* 8);
+				4:
+					PHT_Tmp[0]:=PHT_Tmp[0] AND (NOT ((PHT_WriteByte_LocalFilter AND 16#FF)* 16));
+					PHT_Tmp[0]:=PHT_Tmp[0] OR ((PHT_WriteByte_Value AND 16#FF)* 16);
+				5:
+					PHT_Tmp[0]:=PHT_Tmp[0] AND (NOT ((PHT_WriteByte_LocalFilter AND 16#FF)* 32));
+					PHT_Tmp[0]:=PHT_Tmp[0] OR ((PHT_WriteByte_Value AND 16#FF)* 32);
+				6:
+					PHT_Tmp[0]:=PHT_Tmp[0] AND (NOT ((PHT_WriteByte_LocalFilter AND 16#FF)* 64));
+					PHT_Tmp[0]:=PHT_Tmp[0] OR ((PHT_WriteByte_Value AND 16#FF)* 64);
+				7:
+					PHT_Tmp[0]:=PHT_Tmp[0] AND (NOT ((PHT_WriteByte_LocalFilter AND 16#FF)* 128));
+					PHT_Tmp[0]:=PHT_Tmp[0] OR ((PHT_WriteByte_Value AND 16#FF)* 128);
+				8:
+					PHT_Tmp[0]:=PHT_Tmp[0] AND (NOT ((PHT_WriteByte_LocalFilter AND 16#FF)* 256));
+					PHT_Tmp[0]:=PHT_Tmp[0] OR ((PHT_WriteByte_Value AND 16#FF)* 256);
+				9:
+					PHT_Tmp[0]:=PHT_Tmp[0] AND (NOT ((PHT_WriteByte_LocalFilter AND 16#FF)* 512));
+					PHT_Tmp[0]:=PHT_Tmp[0] OR ((PHT_WriteByte_Value AND 16#FF)* 512);
+				10:
+					PHT_Tmp[0]:=PHT_Tmp[0] AND (NOT ((PHT_WriteByte_LocalFilter AND 16#FF)* 1024));
+					PHT_Tmp[0]:=PHT_Tmp[0] OR ((PHT_WriteByte_Value AND 16#FF)* 1024);
+				11:
+					PHT_Tmp[0]:=PHT_Tmp[0] AND (NOT ((PHT_WriteByte_LocalFilter AND 16#FF)* 2048));
+					PHT_Tmp[0]:=PHT_Tmp[0] OR ((PHT_WriteByte_Value AND 16#FF)* 2048);
+				12:
+					PHT_Tmp[0]:=PHT_Tmp[0] AND (NOT ((PHT_WriteByte_LocalFilter AND 16#FF)* 4096));
+					PHT_Tmp[0]:=PHT_Tmp[0] OR ((PHT_WriteByte_Value AND 16#FF)* 4096);
+				13:
+					PHT_Tmp[0]:=PHT_Tmp[0] AND (NOT ((PHT_WriteByte_LocalFilter AND 16#FF)* 8192));
+					PHT_Tmp[0]:=PHT_Tmp[0] OR ((PHT_WriteByte_Value AND 16#FF)* 8192);
+				14:
+					PHT_Tmp[0]:=PHT_Tmp[0] AND (NOT ((PHT_WriteByte_LocalFilter AND 16#FF)* 16384));
+					PHT_Tmp[0]:=PHT_Tmp[0] OR ((PHT_WriteByte_Value AND 16#FF)* 16384);
+				15:
+					PHT_Tmp[0]:=PHT_Tmp[0] AND (NOT ((PHT_WriteByte_LocalFilter AND 16#FF)* 32768));
+					PHT_Tmp[0]:=PHT_Tmp[0] OR ((PHT_WriteByte_Value AND 16#FF)* 32768);
+				16:
+					PHT_Tmp[0]:=PHT_Tmp[0] AND (NOT ((PHT_WriteByte_LocalFilter AND 16#FF)* 65536));
+					PHT_Tmp[0]:=PHT_Tmp[0] OR ((PHT_WriteByte_Value AND 16#FF)* 65536);
+
+
+			
+
+		End_Case;
+		//str[ByteIndex] = (tmp>>8)&0xFF;
+		//str[ByteIndex+1] = tmp&0xFF;
+		 
+
+		PHT_Digest[PHT_Byte_indxi]:= (PHT_Tmp[0]/256)AND 16#FF;
+		PHT_Digest[PHT_Byte_indxi+1]:=PHT_Tmp[0] AND 16#FF;
+	
+	
+	End_if;

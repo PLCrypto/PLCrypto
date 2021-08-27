@@ -1,0 +1,87 @@
+Speck_AS_res[0]:=0;
+Speck_AS_res[1]:=0;
+
+	//big substraction low-32-bit
+		Speck_Sign_Bits[0].[0]:= Speck_AS_X[0].29; //keep the sign bit for big addition
+		Speck_Sign_Bits[0].[1]:= Speck_AS_X[0].30; //keep the sign bit for big addition
+		Speck_Sign_Bits[0].[2]:= Speck_AS_X[0].31; //keep the sign bit for big addition
+		
+		Speck_AS_X[0].29:=0;
+		Speck_AS_X[0].30 :=1;   //give x  a 'virtual' borrow bit
+		Speck_AS_X[0].31:=0;
+
+
+
+		Speck_Sign_Bits[1].[0]:= Speck_AS_Y[0].29;
+		Speck_Sign_Bits[1].[1]:= Speck_AS_Y[0].30; //keep the sign bit for big addition
+		Speck_Sign_Bits[1].[2]:= Speck_AS_Y[0].31;
+		Speck_AS_Y[0].31:=0;
+		Speck_AS_Y[0].30:=0;
+		Speck_AS_Y[0].29:=0;
+
+		Speck_AS_res[0] := Speck_AS_X[0]-Speck_AS_Y[0];
+		
+		Speck_Carry_Bit.[0]:= NOT Speck_AS_res[0].30;
+
+		Speck_Sign_Bits[0].[4]:=1;  //to ensure that Sign_Bits[0]> Sign_Bits[1]
+		Speck_AS_tmp:=Speck_Sign_Bits[0]-Speck_Sign_Bits[1]-Speck_Carry_Bit;
+
+		
+		
+		Speck_Carry_Bit.[0] := Speck_AS_tmp.[3];
+		Speck_AS_res[0].29:= Speck_AS_tmp.[0];
+		Speck_AS_res[0].30:= Speck_AS_tmp.[1];
+		Speck_AS_res[0].31:= Speck_AS_tmp.[2];
+
+
+		Speck_AS_tmp:=0;
+	 	Speck_Sign_Bits[0]:=0;
+	 	Speck_Sign_Bits[1]:=0;
+
+If Speck_Ver>2 Then
+
+		//sub high 32-bit
+
+		Speck_Sign_Bits[0].[0]:= Speck_AS_X[1].29; //keep the sign bit for big addition
+		Speck_Sign_Bits[0].[1]:= Speck_AS_X[1].30; //keep the sign bit for big addition
+		Speck_Sign_Bits[0].[2]:= Speck_AS_X[1].31; //keep the sign bit for big addition
+		
+		Speck_AS_X[1].29:=0;
+		Speck_AS_X[1].30 :=1;   //give x  a 'virtual' borrow bit
+		Speck_AS_X[1].31:=0;
+
+
+
+		Speck_Sign_Bits[1].[0]:= Speck_AS_Y[1].29;
+		Speck_Sign_Bits[1].[1]:= Speck_AS_Y[1].30; //keep the sign bit for big addition
+		Speck_Sign_Bits[1].[2]:= Speck_AS_Y[1].31;
+		Speck_AS_Y[1].31:=0;
+		Speck_AS_Y[1].30:=0;
+		Speck_AS_Y[1].29:=0;
+
+		Speck_AS_res[1] := Speck_AS_X[1]-Speck_AS_Y[1] -Speck_Carry_Bit;
+
+		Speck_Carry_Bit.[0]:= NOT Speck_AS_res[1].30;
+
+		Speck_Sign_Bits[0].[4]:=1;
+		Speck_AS_tmp:=Speck_Sign_Bits[0]-Speck_Sign_Bits[1]-Speck_Carry_Bit;
+
+		
+		
+		Speck_AS_res[1].29:= Speck_AS_tmp.[0];
+		Speck_AS_res[1].30:= Speck_AS_tmp.[1];
+		Speck_AS_res[1].31:= Speck_AS_tmp.[2];
+
+End_If;
+
+		
+		//clear
+		Speck_Carry_Bit:=0;
+		Speck_AS_tmp:=0;
+		Speck_Sign_Bits[0]:=0;
+		Speck_Sign_Bits[1]:=0;
+		Speck_AS_X[0]:=0;
+		Speck_AS_X[1]:=0;
+		Speck_AS_Y[0]:=0;
+		Speck_AS_Y[1]:=0;
+	

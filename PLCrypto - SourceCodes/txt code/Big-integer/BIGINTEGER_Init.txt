@@ -1,0 +1,16 @@
+Case Big_Ver Of
+0:
+	Big_lb := 4;      // base =10
+	Big_base:=10;
+
+1:
+
+	Big_lb := 15;    // for  both mul/div and add/sub, b=2^15
+	Big_base:=32768;
+
+2:
+	Big_lb := 30;   //for addition only        b=2^30
+	Big_base:=0;
+	Big_base.[30]:=1;
+	AddMul_Digits:=9; //for AddMul
+End_Case;

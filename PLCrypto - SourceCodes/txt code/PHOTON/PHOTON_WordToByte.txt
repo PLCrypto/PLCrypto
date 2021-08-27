@@ -1,0 +1,73 @@
+(*
+void WordToByte(byte state[D][D], byte*str, int BitOffSet, int NoOfBits)
+{
+	int i = 0;
+	while(i < NoOfBits)
+	{
+		WriteByte(str, (state[i/(S*D)][(i/S)%D] & WORDFILTER)>>(S-min(S, NoOfBits-i)), BitOffSet+i, min(S, NoOfBits-i));
+		i += S;
+	});
+}
+*)
+
+// str:   PHT_Digest
+
+
+PHT_WordToByte_i:=0;
+While PHT_WordToByte_i<PHT_WordToByte_NoOfBits Do
+
+
+	//BitOffSet+i
+	PHT_WriteByte_BitOffset:=PHT_WordToByte_BitOffSet+PHT_WordToByte_i;
+	//min(S, NoOfBits-i)
+	PHT_WriteByte_NoOfBits:= PHT_WordToByte_NoOfBits - PHT_WordToByte_i;
+	if PHT_WriteByte_NoOfBits> PHT_S Then
+		PHT_WriteByte_NoOfBits:=PHT_S;
+	End_If;
+	
+	PHT_Tmp[1]:=PHT_S-PHT_WriteByte_NoOfBits;
+
+	//  i/(S*D)
+	PHT_Byte_indxi:=  PHT_WordToByte_i/(PHT_S*PHT_D);
+	//  (i/S)%D
+	PHT_Bit_indxj:= (PHT_WordToByte_i/PHT_S) MOD PHT_D;
+	
+	
+	PHT_Tmp[0]:= PHT_State[PHT_Byte_indxi,PHT_Bit_indxj];
+	
+	//& Wordfilter
+	If PHT_S=8 Then
+		PHT_Tmp[0]:= PHT_Tmp[0] AND 16#ff;
+	Else
+		PHT_Tmp[0]:= PHT_Tmp[0] AND 16#f;
+	End_If;
+
+	//>>(S-min(S, NoOfBits-i))
+	CASE PHT_Tmp[1] OF
+		1:
+			PHT_Tmp[0]:=PHT_Tmp[0]/2;
+		2:
+			PHT_Tmp[0]:=PHT_Tmp[0]/4;
+
+		3:
+			PHT_Tmp[0]:=PHT_Tmp[0]/8;
+		4:
+			PHT_Tmp[0]:=PHT_Tmp[0]/16;
+		5:
+			PHT_Tmp[0]:=PHT_Tmp[0]/32;
+		6:
+			PHT_Tmp[0]:=PHT_Tmp[0]/64;
+		7:
+			PHT_Tmp[0]:=PHT_Tmp[0]/128;
+		8:
+			PHT_Tmp[0]:=PHT_Tmp[0]/256;
+	End_Case;
+	PHT_WriteByte_Value:=PHT_Tmp[0];
+
+	JSR(PHOTON_WriteByte);
+
+
+
+	PHT_WordToByte_i:=PHT_WordToByte_i+PHT_S;
+	
+End_While;

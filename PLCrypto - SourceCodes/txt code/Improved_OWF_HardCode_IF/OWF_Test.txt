@@ -1,0 +1,43 @@
+//Description: initialize the variables.
+
+
+OWF_Ver:=2; 
+
+if S:FS then  (* this is the first, normal scan of the routines in the current program, initialize the program.*)
+	 //OWF_Ver means that the version of OWF: 256-256 bits, 384-384 bits, and 512-512 bits. The first number is length of input, the last number is length of output.
+                 //If OWF_Ver means that the version of Hash, then three versions are: 256-128 bits, 384-160 bits and 512-256 bits.
+	If OWF_Ver=0 then
+	 
+		for OWF_i:=0 to OWF_InputMaxInd by 1 Do
+			OWF_Input[OWF_i]:= 65535;   //Half of the selection factors are 1.
+			//OWF_sel[OWF_i]:= -1;    //All the selection factors are 1.
+		end_for;
+
+	end_if;
+
+
+	If OWF_Ver=1 then
+		 
+		for OWF_i:=0 to OWF_InputMaxInd by 1 Do
+			OWF_Input[OWF_i]:= 65535;     //Half of the selection factors are 1.
+			//OWF_sel[OWF_i]:= -1;   //All the selection factors are 1.
+		end_for;
+	
+	end_if;
+
+
+	If OWF_Ver=2 then
+	 
+		for OWF_i:=0 to OWF_InputMaxInd by 1 Do
+			OWF_Input[OWF_i]:= 65535;     //Half of the selection factors are 1.
+			//OWF_sel[OWF_i]:= -1;   //All the selection factors are 1.
+		end_for;
+
+
+	end_if;
+
+end_if;
+
+
+	jsr(Improved_OWF);
+

@@ -1,0 +1,9 @@
+// init PRG_Count[0] and PRG_Count[1] during application.. for PRF.. they could be any values
+//For PRG application, PRG_Count[0] defines the output length (i.e., the number of 64-bit, e.g., 128-bit output, PRG_Count[0]:=2)
+
+//initialize version 
+
+PRG_j:=0;
+PRG_Res_Len :=  (PRG_Counter[0] AND 16#0000ffff)-1;
+
+JSR(PRESENT_Init);

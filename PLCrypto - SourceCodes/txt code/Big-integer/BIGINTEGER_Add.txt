@@ -1,0 +1,46 @@
+//Calculate the addition of big numbers.  Resource: page 594 of the handbook.
+//input positive big intergers  Add_input_x[] and Add_input_y[], each having UHF_sints base UHF_base digits.
+//output: the sum Add_Result[] in radix UHF_base representation.
+
+// Addition test
+(*if S:FS then
+	Add_Digits:= 10;  //the Digits of input.
+	UHF_base:= 10; //input in decimal
+	// Addition test
+	for Add_i:=0 to Add_Digits-1 by 1 do //assign value to input
+		Add_input_x[Add_i]:=9;
+		Add_input_y[Add_i]:=9;
+	end_for;
+end_if; *)
+
+//JSR(BIGINTEGER_Init);
+
+
+
+for Add_i:=0 to Add_Digits by 1 do
+	Add_Result[Add_i]:=0;  //Initialize the sum to 0.
+end_for;
+
+//Calculate the sum Add_input_x[] + Add_input_y[].
+Add_c.[0]:=0;   //Initialize carry to zero.
+
+for Add_j:=0 to Add_Digits-1 by 1 do
+	Add_Result[Add_j]:=Add_input_x[Add_j] + Add_input_y[Add_j] + Add_c; // Compute every digit of the sum.
+	
+	Case Big_Ver OF
+	0:
+		if Add_Result[Add_j]> Big_base Then
+			Add_c:=1;
+		else
+			Add_c:=0;
+		End_if;
+		Add_Result[Add_j]:= Add_tmp mod Big_base;
+	1,2:
+		Add_c.[0]:=Add_Result[Add_j].[Big_lb];	
+		Add_Result[Add_j].[Big_lb]:=0;	//最高位清零
+	End_Case;
+end_for;
+
+Add_Result[Add_Digits]:= Add_c;
+
+Add_c:=0;

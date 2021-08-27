@@ -1,0 +1,17 @@
+If S:FS Then
+	
+	PT_Plaintext[0]:=655340;
+	PT_Plaintext[1]:=-1;
+
+
+	JSR(PRESENT_Enc);
+
+
+End_if;
+
+
+//JSR(PRESENT_Dec);
+
+
+
+

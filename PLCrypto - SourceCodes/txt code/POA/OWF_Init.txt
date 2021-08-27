@@ -1,0 +1,8 @@
+OWF_InputLen:=255;  //bits of input.
+OWF_InputMaxInd:=8;  //maximum index for dints which store the bits of input.
+
+
+For OWF_i:=0 to OWF_InputMaxInd by 1 do
+	OWF_Result[OWF_i]:=0;
+End_For;
+

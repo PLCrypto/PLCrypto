@@ -1,0 +1,39 @@
+
+
+JSR(UOWHF_Init);
+
+
+
+UOWHF_VaryLen:=(UOWHF_Vary_MsgLen+1) MOD (UOWHF_OutputMaxInd+1);
+If UOWHF_VaryLen<>0 Then
+	UOWHF_VaryLen:=UOWHF_OutputMaxInd+1 - UOWHF_VaryLen;
+
+	//pad 1 if neccessary 
+	For UOWHF_Vary_i:=UOWHF_Vary_MsgLen+1 to UOWHF_Vary_MsgLen+UOWHF_VaryLen by 1 Do
+	
+		UOWHF_Vary_Message[UOWHF_Vary_i]:=65535; 
+
+	End_For;
+	UOWHF_Vary_MsgLen:=UOWHF_Vary_MsgLen+UOWHF_VaryLen; 
+End_if;
+
+
+UOWHF_Vary_BlkNum:= (UOWHF_Vary_MsgLen+1)/(UOWHF_OutputMaxInd+1)-1 ;
+
+For UOWHF_Vary_i:=0 to UOWHF_InputMaxInd by 1 Do 
+	UOWHF_Msg[UOWHF_Vary_i]:=UOWHF_Vary_Message[UOWHF_Vary_i];
+End_For;
+JSR(UOWHF);
+
+UOWHF_Vary_z:=UOWHF_InputMaxInd+1;
+For UOWHF_Vary_i:=2 to UOWHF_Vary_BlkNum by 1 Do 
+	
+	For UOWHF_Vary_j:=0 to UOWHF_OutputMaxInd by 1 Do 
+		UOWHF_Msg[UOWHF_Vary_j]:=UOWHF_Vary_Message[UOWHF_Vary_z+UOWHF_Vary_j];	
+		UOWHF_Msg[UOWHF_Vary_j+UOWHF_OutputMaxInd+1]:=UOWHF_Result[UOWHF_Vary_j];	
+	End_For;
+	JSR(UOWHF);
+	UOWHF_Vary_z:=UOWHF_Vary_z+UOWHF_OutputMaxInd+1;
+End_For;
+
+

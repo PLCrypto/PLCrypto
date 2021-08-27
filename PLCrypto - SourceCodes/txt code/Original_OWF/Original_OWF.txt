@@ -1,0 +1,46 @@
+
+//implement One Way Function (OWF) based on subset Sum.
+//input: choice factor OWF_Input[], array OWF_Key[][].
+//output: OWF_Result[]
+
+(*
+	for OWF_i:=0 to OWF_InputMaxInd by 1 Do
+		OWF_Result[OWF_i]:= 0;  //Initialize the OWF_Result[].
+	end_for;
+*)
+
+
+OWF_bit:=0;   // bit index
+OWF_blk:=0;   // block index
+
+JSR(OWF_Init);
+
+	//compute subset sum.
+	for OWF_i:=0 to OWF_InputLen by 1 do
+		If OWF_bit = 32 then  
+			OWF_bit:=0;
+			OWF_blk:=OWF_blk+1;
+		end_if;
+		OWF_Add_c:=0;
+		if OWF_Input[OWF_blk].[OWF_bit] then 
+			for OWF_j:=0 to OWF_InputMaxInd-1 by 1 Do
+				OWF_Result[OWF_j]:=OWF_Result[OWF_j] + OWF_Key[OWF_i,OWF_j] + OWF_Add_c;    //compute the result of subset sum.
+				OWF_Add_c.0:= OWF_Result[OWF_j].31;
+				OWF_Result[OWF_j].31:=0;
+			end_for;
+			OWF_Result[OWF_j]:=OWF_Result[OWF_j] + OWF_Key[OWF_i,OWF_j] + OWF_Add_c;    
+		end_if;
+		OWF_bit:=OWF_bit + 1; 
+	end_for;
+
+If OWF_Ver=0 Then
+	OWF_Result[OWF_InputMaxInd]:=OWF_Result[OWF_InputMaxInd] and 16#FF; //clear high bit
+End_If;
+
+If OWF_Ver=1 Then
+	OWF_Result[OWF_InputMaxInd]:=OWF_Result[OWF_InputMaxInd] and 16#FFF; //clear high bit
+End_If;
+
+If OWF_Ver = 2 Then
+	OWF_Result[OWF_InputMaxInd]:=OWF_Result[OWF_InputMaxInd] and 16#FFFF; //clear high bit
+End_If;

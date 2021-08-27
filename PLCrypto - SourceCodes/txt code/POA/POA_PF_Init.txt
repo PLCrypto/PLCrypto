@@ -1,0 +1,6 @@
+	POA_lr :=8;  //256 bits
+ 	
+	POA_SC_Interval:=8388608;  // 2^23;
+	
+	POA_Pf_Indx:= 64;  //the number of passwords in a OWF chain
+

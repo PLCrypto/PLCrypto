@@ -1,0 +1,70 @@
+if S:FS then
+	Speck_Ver:=3;     // 0: 32/64, 1: 64: 96, 2: 64:128, 3:128/128, 4:128/192, 5: 128/256
+	//32-64
+	Case Speck_Ver Of
+		0,1,2:
+			//Speck_Plaintext[0,0]:=16#694c; //Upper bits of current plaintext
+			//Speck_Plaintext[1,0]:=16#6574;  //Lower bits of current plaintext
+			//Speck_Plaintext[0,0]:=1936613733; //Upper bits of current plaintext
+			//Speck_Plaintext[1,0]:=1952532000;  //Lower bits of current plaintext
+			Speck_Plaintext[0,0]:=1953841965; //Upper bits of current plaintext
+			Speck_Plaintext[1,0]:=997352820;  //Lower bits of current plaintext
+
+		3,4,5: 
+			Speck_Plaintext[0,0]:=1684106528; //Upper bits of current plaintext
+			Speck_Plaintext[0,1]:=1953046629;//Lower bits of current plaintext
+			Speck_Plaintext[1,0]:=1970365728; //Upper bits of current plaintext
+			Speck_Plaintext[1,1]:=1818326633; //Lower bits of current plaintext
+(*
+			Speck_Plaintext[0,0]:=544501349;  //ver=4
+			Speck_Plaintext[0,1]:=1126199156;
+			Speck_Plaintext[1,0]:=1717922152;
+			Speck_Plaintext[1,1]:=1918978080;*)
+
+(*
+			Speck_Plaintext[0,0]:=1852796784; //ver=5
+			Speck_Plaintext[0,1]:=539914853;
+			Speck_Plaintext[1,0]:=1948282441;
+			Speck_Plaintext[1,1]:=1702063976;*) 
+	End_Case;
+	JSR(SPECK_Enc);
+	//JSR(SPECK_Dec);
+end_if;
+
+
+	//JSR(SPECK_Dec);
+
+
+
+(*
+
+Speck_Ver:=3; 
+Speck_AS_Y[0]:=-536872146;
+Speck_AS_Y[1]:=-536872146;
+Speck_AS_X[0]:=1610625810;
+Speck_AS_X[1]:=1610625810;
+
+
+JSR(SPECK_Add);
+
+
+Speck_AS_X[0]:=Speck_AS_res[0];
+Speck_AS_X[1]:=Speck_AS_res[1];
+
+Speck_AS_Y[0]:=-536872146;
+Speck_AS_Y[1]:=-536872146;
+
+
+JSR(SPECK_Sub);
+
+*)
+
+
+
+
+
+
+
+
+
+

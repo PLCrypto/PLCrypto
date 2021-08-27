@@ -1,0 +1,45 @@
+(*Big_Ver:=2;
+
+Add_Digits:=2;
+Add_input_x[0]:=-1;
+
+Add_input_x[1]:=12345;
+
+Add_input_y[0]:=-3;
+
+Add_input_y[1] := -29747;
+
+
+JSR(BigNumber_Add);  *)
+
+Big_Ver:=2; 
+
+JSR(BIGINTEGER_Init);
+
+if S:FS then
+//addmul test
+	for AddMul_i:=0 to AddMul_Digits-2 by 1 do
+		AddMul_Base[AddMul_i]:=-1 AND 16#3FFFFFFF;
+		AddMul_input_g[AddMul_i]:=5678;
+		AddMul_input_exp[AddMul_i]:=-1 AND 16#3FFFFFFF;
+	end_for;
+	Mul_Digits:=AddMul_Digits-2; 
+	Mul_input_y[Mul_i]:=2;
+	for Mul_i:=0 to Mul_Digits-1 by 1 do   //assign value to input
+		Mul_input_x[Mul_i]:=AddMul_Base[Mul_i];
+		if Mul_i=0 Then
+			Mul_input_y[Mul_i]:=2;
+		else
+			Mul_input_y[Mul_i]:=0;
+		End_If;
+	end_for;
+	JSR(BIGINTEGER_Mul);
+
+	for Mul_i:=0 to Mul_Digits by 1 do   
+		AddMul_2Base[Mul_i]:=Mul_Result[Mul_i];
+	end_for;
+
+
+end_if;
+
+JSR(BIGINTEGER_AMul);

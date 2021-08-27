@@ -1,0 +1,98 @@
+(*
+void SCShRMCS(byte state[D][D])
+{
+	int c,r;
+	tword v;
+	byte os[D][D];
+	memcpy(os, state, D*D);
+
+	for(c = 0; c < D; c++){ // for all columns
+		v = 0;
+		for(r = 0; r < D; r++) // for all rows in this column i after ShiftRow
+			v ^= Table[r][os[r][(r+c)%D]];
+
+		for(r = 1; r <= D; r++){
+			state[D-r][c] = (byte)v & WORDFILTER;
+			v >>= S;
+		}
+	}
+}
+*)
+
+FOR PHT_SCS_i:=0 to PHT_D-1 by 1 do
+	FOR PHT_SCS_j:=0 to PHT_D-1 by 1 do
+		PHT_SCS_OS[PHT_SCS_i,PHT_SCS_j]:=PHT_State[PHT_SCS_i,PHT_SCS_j];
+	END_FOR;
+END_FOR;
+
+if PHT_Ver<=4 then
+	
+	for PHT_SCS_c:= 0 to PHT_D-1 by 1 do
+		PHT_SCS_v[0]:=0;
+			
+		for PHT_SCS_r:=0 to PHT_D-1 by 1 do
+			PHT_SCS_index:=PHT_SCS_OS[PHT_SCS_r,(PHT_SCS_r+PHT_SCS_c) mod PHT_D];
+			PHT_SCS_v[0]:=PHT_SCS_v[0] XOR PHT_Table[PHT_SCS_r,PHT_SCS_index,0];
+		end_for;
+
+		PHT_SCS_j:=0;
+		
+		for PHT_SCS_r:=1 to PHT_D by 1 do
+			 PHT_SCS_indxi:=PHT_D-PHT_SCS_r;
+			 PHT_State[PHT_SCS_indxi,PHT_SCS_c]:=0;
+			 PHT_State[PHT_SCS_indxi,PHT_SCS_c].[0]:=PHT_SCS_v[0].[PHT_SCS_j];
+			 PHT_State[PHT_SCS_indxi,PHT_SCS_c].[1]:=PHT_SCS_v[0].[PHT_SCS_j+1];
+			 PHT_State[PHT_SCS_indxi,PHT_SCS_c].[2]:=PHT_SCS_v[0].[PHT_SCS_j+2];
+			 PHT_State[PHT_SCS_indxi,PHT_SCS_c].[3]:=PHT_SCS_v[0].[PHT_SCS_j+3];
+			 PHT_SCS_j:=PHT_SCS_j + 4;
+
+		end_for;
+	end_for;
+
+ 
+
+ else
+
+	for PHT_SCS_c:= 0 to PHT_D-1 by 1 do
+		PHT_SCS_v[0]:=0;
+		PHT_SCS_v[1]:=0;
+			
+		for PHT_SCS_r:=0 to PHT_D-1 by 1 do
+			PHT_SCS_index:=PHT_SCS_OS[PHT_SCS_r,(PHT_SCS_r+PHT_SCS_c) mod PHT_D];
+			PHT_SCS_v[0]:=PHT_SCS_v[0] XOR PHT_Table[PHT_SCS_r,PHT_SCS_index,0];
+			PHT_SCS_v[1]:=PHT_SCS_v[1] XOR PHT_Table[PHT_SCS_r,PHT_SCS_index,1];
+		end_for;
+
+		PHT_SCS_j:=0;
+		PHT_SCS_i:=0;
+		
+		for PHT_SCS_r:=1 to PHT_D by 1 do
+				PHT_SCS_indxi:=PHT_D-PHT_SCS_r;
+				PHT_State[PHT_SCS_indxi,PHT_SCS_c]:=0;
+			if PHT_SCS_j < 32 then
+				PHT_State[PHT_SCS_indxi,PHT_SCS_c].[0]:=PHT_SCS_v[0].[PHT_SCS_j];
+				PHT_State[PHT_SCS_indxi,PHT_SCS_c].[1]:=PHT_SCS_v[0].[PHT_SCS_j+1];
+				PHT_State[PHT_SCS_indxi,PHT_SCS_c].[2]:=PHT_SCS_v[0].[PHT_SCS_j+2];
+				PHT_State[PHT_SCS_indxi,PHT_SCS_c].[3]:=PHT_SCS_v[0].[PHT_SCS_j+3];
+				PHT_State[PHT_SCS_indxi,PHT_SCS_c].[4]:=PHT_SCS_v[0].[PHT_SCS_j+4];
+				PHT_State[PHT_SCS_indxi,PHT_SCS_c].[5]:=PHT_SCS_v[0].[PHT_SCS_j+5];
+				PHT_State[PHT_SCS_indxi,PHT_SCS_c].[6]:=PHT_SCS_v[0].[PHT_SCS_j+6];
+				PHT_State[PHT_SCS_indxi,PHT_SCS_c].[7]:=PHT_SCS_v[0].[PHT_SCS_j+7];
+				PHT_SCS_j:=PHT_SCS_j + 8;
+
+			else
+				PHT_State[PHT_SCS_indxi,PHT_SCS_c].[0]:=PHT_SCS_v[1].[PHT_SCS_i];
+				PHT_State[PHT_SCS_indxi,PHT_SCS_c].[1]:=PHT_SCS_v[1].[PHT_SCS_i+1];
+				PHT_State[PHT_SCS_indxi,PHT_SCS_c].[2]:=PHT_SCS_v[1].[PHT_SCS_i+2];
+				PHT_State[PHT_SCS_indxi,PHT_SCS_c].[3]:=PHT_SCS_v[1].[PHT_SCS_i+3];
+				PHT_State[PHT_SCS_indxi,PHT_SCS_c].[4]:=PHT_SCS_v[1].[PHT_SCS_i+4];
+				PHT_State[PHT_SCS_indxi,PHT_SCS_c].[5]:=PHT_SCS_v[1].[PHT_SCS_i+5];
+				PHT_State[PHT_SCS_indxi,PHT_SCS_c].[6]:=PHT_SCS_v[1].[PHT_SCS_i+6];
+				PHT_State[PHT_SCS_indxi,PHT_SCS_c].[7]:=PHT_SCS_v[1].[PHT_SCS_i+7];
+				PHT_SCS_i:=PHT_SCS_i + 8;
+			end_if;
+	   end_for;
+
+	end_for;
+
+end_if;

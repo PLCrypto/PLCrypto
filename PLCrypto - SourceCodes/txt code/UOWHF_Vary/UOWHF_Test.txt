@@ -1,0 +1,37 @@
+//Description: initialize the variables.
+
+
+UOWHF_Ver:=2; 
+
+UOWHF_Vary_MsgLen:=17;
+
+if S:FS then  (* this is the first, normal scan of the routines in the current program, initialize the program.*)
+	 //UOWHF_Ver means that the version of OWF: 256-256 bits, 384-384 bits, and 512-512 bits. The first number is length of input, the last number is length of output.
+                 //If UOWHF_Ver means that the version of Hash, then three versions are: 256-128 bits, 384-160 bits and 512-256 bits.
+	If UOWHF_Ver=0 then	 
+		for UOWHF_i:=0 to UOWHF_Vary_MsgLen by 1 Do
+			UOWHF_Vary_Message[UOWHF_i]:= 65535;   //Half of the selection factors are 1.
+			//UOWHF_Msg[UOWHF_i]:= -1;    //All the selection factors are 1.
+		end_for;
+	end_if;
+
+	If UOWHF_Ver=1 then
+		for UOWHF_i:=0 to UOWHF_Vary_MsgLen by 1 Do
+			UOWHF_Vary_Message[UOWHF_i]:= 65535;     //Half of the selection factors are 1.
+			//UOWHF_Msg[UOWHF_i]:= -1;   //All the selection factors are 1.
+		end_for;
+	end_if;
+
+	If UOWHF_Ver=2 then	 
+		for UOWHF_i:=0 to UOWHF_Vary_MsgLen by 1 Do
+			UOWHF_Vary_Message[UOWHF_i]:= 65535;     //Half of the selection factors are 1.
+			//UOWHF_Msg[UOWHF_i]:= -1;   //All the selection factors are 1.
+		end_for;
+	end_if;
+
+end_if;
+
+jsr(UOWHF_Vary);
+
+
+

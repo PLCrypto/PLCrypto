@@ -1,0 +1,103 @@
+
+JSR(SIMON_Init);
+
+
+
+
+Case Simon_Ver Of
+
+0,1,2:
+	Simon_Plaintext[1,0]:=Simon_Ciphertext[0,0];
+	Simon_Plaintext[0,0]:=Simon_Ciphertext[1,0];
+
+	For Simon_i:=Simon_Rd_Max to 0 by -1 do
+		Simon_tmp2[0]:=Simon_Plaintext[0,0];  //for rotate
+		JSR(SIMON_Rotate_Left1);	//rotate based on Simon_Ciphertext[0,0]
+		Simon_tmp1[0]:= Simon_Rotate_Result[0]; 
+		Simon_Rotate_Result[0]:=0;
+
+		Simon_tmp2[0]:=Simon_Plaintext[0,0];  //for rotate
+		JSR(SIMON_Rotate_Left8);
+		Simon_tmp2[0]:=Simon_Rotate_Result[0];
+		Simon_tmp1[0]:= Simon_tmp1[0] AND Simon_tmp2[0];
+		Simon_Rotate_Result[0]:=0;
+
+		Simon_tmp2[0]:=Simon_Plaintext[0,0];  //for rotate
+		JSR(SIMON_Rotate_Left2);
+		Simon_tmp1[0]:= Simon_tmp1[0] XOR Simon_Rotate_Result[0];
+		
+		Simon_tmp1[0]:= Simon_tmp1[0] XOR Simon_Round_Keys[Simon_i,0];
+		
+		Simon_Plaintext[0,0]:= Simon_Plaintext[1,0] XOR Simon_tmp1[0];
+		Simon_Plaintext[1,0]:= Simon_tmp2[0];
+
+		Simon_Rotate_Result[0]:=0;
+
+	End_for;
+
+3,4,5:
+	Simon_Plaintext[1,0]:=Simon_Ciphertext[0,0];
+	Simon_Plaintext[1,1]:=Simon_Ciphertext[0,1];
+	Simon_Plaintext[0,0]:=Simon_Ciphertext[1,0];
+	Simon_Plaintext[0,1]:=Simon_Ciphertext[1,1];
+
+	For Simon_i:=Simon_Rd_Max to 0 by -1 do
+		
+		Simon_tmp2[0]:=Simon_Plaintext[0,0];  //for rotate
+		Simon_tmp2[1]:=Simon_Plaintext[0,1];
+
+		JSR(SIMON_Rotate_Left1);	//rotate based on Simon_Ciphertext[0,0] and [0,1]
+		Simon_tmp1[0]:= Simon_Rotate_Result[0]; 
+		Simon_tmp1[1]:= Simon_Rotate_Result[1]; 
+
+		Simon_Rotate_Result[0]:=0;
+		Simon_Rotate_Result[1]:=0;
+
+		Simon_tmp2[0]:=Simon_Plaintext[0,0];
+		Simon_tmp2[1]:=Simon_Plaintext[0,1];
+		JSR(SIMON_Rotate_Left8);
+		Simon_tmp2[0]:=Simon_Rotate_Result[0];
+		Simon_tmp2[1]:=Simon_Rotate_Result[1];
+		Simon_tmp1[0]:= Simon_tmp1[0] AND Simon_tmp2[0];
+		Simon_tmp1[1]:= Simon_tmp1[1] AND Simon_tmp2[1];
+
+		Simon_tmp2[0]:=Simon_Plaintext[0,0];
+		Simon_tmp2[1]:=Simon_Plaintext[0,1];
+
+		Simon_Rotate_Result[0]:=0;
+		Simon_Rotate_Result[1]:=0;
+
+		JSR(SIMON_Rotate_Left2);
+		Simon_tmp1[0]:= Simon_tmp1[0] XOR Simon_Rotate_Result[0];
+		Simon_tmp1[1]:= Simon_tmp1[1] XOR Simon_Rotate_Result[1];
+		
+		Simon_tmp1[0]:= Simon_tmp1[0] XOR Simon_Round_Keys[Simon_i,0];
+		Simon_tmp1[1]:= Simon_tmp1[1] XOR Simon_Round_Keys[Simon_i,1];
+		
+
+		Simon_Plaintext[0,0]:= Simon_Plaintext[1,0] XOR Simon_tmp1[0];
+		Simon_Plaintext[0,1]:= Simon_Plaintext[1,1] XOR Simon_tmp1[1];
+
+		Simon_Plaintext[1,0]:= Simon_tmp2[0];
+		Simon_Plaintext[1,1]:= Simon_tmp2[1];
+
+		Simon_Rotate_Result[0]:=0;
+		Simon_Rotate_Result[1]:=0;
+
+	End_for;
+
+End_Case;
+
+
+
+
+
+
+JSR(SIMON_ClearKey);
+
+
+
+
+
+
+

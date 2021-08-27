@@ -1,0 +1,29 @@
+(*
+if S:FS Then
+	PHT_Ver:=5;
+
+	PHT_BitLen:=40;
+
+	for Test_i:=0 to PHT_BitLen/8-1 by 1 do
+		PHT_Msg[Test_i]:=0;
+	end_for;
+
+	JSR(PHOTON);
+end_if;
+*)
+
+
+
+if S:FS Then
+	PHT_Ver:=0;
+
+	PHT_MsgBitLen:=8;
+
+	for Test_i:=0 to PHT_MsgBitLen/8-1 by 1 do
+		PHT_Message[Test_i]:=48;
+	end_for;
+	
+
+	JSR(PHOTON);
+end_if;
+

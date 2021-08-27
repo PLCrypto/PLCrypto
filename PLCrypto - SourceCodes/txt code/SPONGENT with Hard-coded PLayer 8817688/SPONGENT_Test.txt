@@ -1,0 +1,22 @@
+
+
+if S:FS Then
+	Spon_Ver:=8817688;
+
+	Spon_MsgBitLen:=216;
+	for Test_i:=0 to Spon_MsgBitLen/8-1 by 1 do
+		Spon_Message[Test_i]:=48;
+	end_for;
+
+	for Test_i:=0 to Spon_DIGESTSIZE-1 by 1 do
+		Spon_Digest[Test_i]:=0;
+	end_for;
+	
+//Jsr(SPONGENT_Init);
+ 
+ 
+
+end_if;
+
+Spon_MsgBitLen:=216;
+JSR(SPONGENT);

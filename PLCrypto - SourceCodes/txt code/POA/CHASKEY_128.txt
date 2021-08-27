@@ -1,0 +1,227 @@
+JSR(CHASKEY_Init);
+
+Chaskey_BNum:= Chaskey_MsgBitLen/128;
+
+if Chaskey_MsgBitLen mod 128 <>0 then
+	Chaskey_BNum:= Chaskey_BNum+1;
+end_if;
+
+
+for Chaskey_i:=0 to Chaskey_mlen by 1 do
+	Chaskey_MsgBlkLen:=Chaskey_mlen/4;
+	Chaskey_z:=Chaskey_i mod 4;
+	for Chaskey_j:=0 to 7 by 1 do
+		Chaskey_MsgBlk[Chaskey_MsgBlkLen].[Chaskey_z*8+Chaskey_j]:=Chaskey_Message[Chaskey_i].[Chaskey_j];
+	end_for;
+end_for;
+
+Chaskey_input_pi[3] := Chaskey_key[3];
+Chaskey_input_pi[2] := Chaskey_key[2] ;
+Chaskey_input_pi[1] := Chaskey_key[1] ;
+Chaskey_input_pi[0] := Chaskey_key[0] ;
+
+Chaskey_i:=0;
+if Chaskey_mlen<>0 then
+	while Chaskey_i < Chaskey_BNum-1 do
+		Chaskey_128_i:=Chaskey_i*4;
+		Chaskey_input_pi[3] := Chaskey_input_pi[3] XOR Chaskey_MsgBlk[Chaskey_128_i+3];
+		Chaskey_input_pi[2] := Chaskey_input_pi[2] XOR Chaskey_MsgBlk[Chaskey_128_i+2];
+		Chaskey_input_pi[1] := Chaskey_input_pi[1] XOR Chaskey_MsgBlk[Chaskey_128_i+1];
+		Chaskey_input_pi[0] := Chaskey_input_pi[0] XOR Chaskey_MsgBlk[Chaskey_128_i+0];
+		JSR(CHASKEY_Permutation);
+
+		if Chaskey_i>=Chaskey_BNum-2 then
+			Exit;
+		end_if;
+
+		Chaskey_i:=Chaskey_i +1;
+	end_while;
+end_if;
+
+
+if (Chaskey_mlen<>0) AND ((Chaskey_mlen & 15)=0) then
+	Chaskey_L[3] := Chaskey_subkey_1[3];
+	Chaskey_L[2] := Chaskey_subkey_1[2] ;
+	Chaskey_L[1] := Chaskey_subkey_1[1] ;
+	Chaskey_L[0] := Chaskey_subkey_1[0] ;
+	Chaskey_LastBlk[0]:=Chaskey_MsgBlk[0];
+	Chaskey_LastBlk[1]:=Chaskey_MsgBlk[1];
+	Chaskey_LastBlk[2]:=Chaskey_MsgBlk[2];
+	Chaskey_LastBlk[3]:=Chaskey_MsgBlk[3];
+else
+	Chaskey_L[3] := Chaskey_subkey_2[3];
+	Chaskey_L[2] := Chaskey_subkey_2[2] ;
+	Chaskey_L[1] := Chaskey_subkey_2[1] ;
+	Chaskey_L[0] := Chaskey_subkey_2[0] ;
+
+
+	Chaskey_IndexMod:= Chaskey_mlen mod 16;
+	Chaskey_IndexDiv:= (Chaskey_mlen/16)*16;
+	for Chaskey_j:=0 to Chaskey_IndexMod-1 by 1 do
+		Chaskey_lb[Chaskey_j]:=Chaskey_Message[Chaskey_IndexDiv+Chaskey_j];
+	end_for;
+	Chaskey_lb[Chaskey_IndexMod]:=1;
+	for Chaskey_j:=Chaskey_IndexMod+1 to 15 by 1 do
+		Chaskey_lb[Chaskey_j]:=0;
+	end_for;
+
+	//lastblock = (uint32_t*) lb;
+	Chaskey_LastBlk[0].0:=Chaskey_lb[0].0;
+	Chaskey_LastBlk[0].1:=Chaskey_lb[0].1;
+	Chaskey_LastBlk[0].2:=Chaskey_lb[0].2;
+	Chaskey_LastBlk[0].3:=Chaskey_lb[0].3;
+	Chaskey_LastBlk[0].4:=Chaskey_lb[0].4;
+	Chaskey_LastBlk[0].5:=Chaskey_lb[0].5;
+	Chaskey_LastBlk[0].6:=Chaskey_lb[0].6;
+	Chaskey_LastBlk[0].7:=Chaskey_lb[0].7;
+	Chaskey_LastBlk[0].8:=Chaskey_lb[1].0;
+	Chaskey_LastBlk[0].9:=Chaskey_lb[1].1;
+	Chaskey_LastBlk[0].10:=Chaskey_lb[1].2;
+	Chaskey_LastBlk[0].11:=Chaskey_lb[1].3;
+	Chaskey_LastBlk[0].12:=Chaskey_lb[1].4;
+	Chaskey_LastBlk[0].13:=Chaskey_lb[1].5;
+	Chaskey_LastBlk[0].14:=Chaskey_lb[1].6;
+	Chaskey_LastBlk[0].15:=Chaskey_lb[1].7;
+	Chaskey_LastBlk[0].16:=Chaskey_lb[2].0;
+	Chaskey_LastBlk[0].17:=Chaskey_lb[2].1;
+	Chaskey_LastBlk[0].18:=Chaskey_lb[2].2;
+	Chaskey_LastBlk[0].19:=Chaskey_lb[2].3;
+	Chaskey_LastBlk[0].20:=Chaskey_lb[2].4;
+	Chaskey_LastBlk[0].21:=Chaskey_lb[2].5;
+	Chaskey_LastBlk[0].22:=Chaskey_lb[2].6;
+	Chaskey_LastBlk[0].23:=Chaskey_lb[2].7;
+	Chaskey_LastBlk[0].24:=Chaskey_lb[3].0;
+	Chaskey_LastBlk[0].25:=Chaskey_lb[3].1;
+	Chaskey_LastBlk[0].26:=Chaskey_lb[3].2;
+	Chaskey_LastBlk[0].27:=Chaskey_lb[3].3;
+	Chaskey_LastBlk[0].28:=Chaskey_lb[3].4;
+	Chaskey_LastBlk[0].29:=Chaskey_lb[3].5;
+	Chaskey_LastBlk[0].30:=Chaskey_lb[3].6;
+	Chaskey_LastBlk[0].31:=Chaskey_lb[3].7;
+
+	Chaskey_LastBlk[1].0:=Chaskey_lb[4].0;
+	Chaskey_LastBlk[1].1:=Chaskey_lb[4].1;
+	Chaskey_LastBlk[1].2:=Chaskey_lb[4].2;
+	Chaskey_LastBlk[1].3:=Chaskey_lb[4].3;
+	Chaskey_LastBlk[1].4:=Chaskey_lb[4].4;
+	Chaskey_LastBlk[1].5:=Chaskey_lb[4].5;
+	Chaskey_LastBlk[1].6:=Chaskey_lb[4].6;
+	Chaskey_LastBlk[1].7:=Chaskey_lb[4].7;
+	Chaskey_LastBlk[1].8:=Chaskey_lb[5].0;
+	Chaskey_LastBlk[1].9:=Chaskey_lb[5].1;
+	Chaskey_LastBlk[1].10:=Chaskey_lb[5].2;
+	Chaskey_LastBlk[1].11:=Chaskey_lb[5].3;
+	Chaskey_LastBlk[1].12:=Chaskey_lb[5].4;
+	Chaskey_LastBlk[1].13:=Chaskey_lb[5].5;
+	Chaskey_LastBlk[1].14:=Chaskey_lb[5].6;
+	Chaskey_LastBlk[1].15:=Chaskey_lb[5].7;
+	Chaskey_LastBlk[1].16:=Chaskey_lb[6].0;
+	Chaskey_LastBlk[1].17:=Chaskey_lb[6].1;
+	Chaskey_LastBlk[1].18:=Chaskey_lb[6].2;
+	Chaskey_LastBlk[1].19:=Chaskey_lb[6].3;
+	Chaskey_LastBlk[1].20:=Chaskey_lb[6].4;
+	Chaskey_LastBlk[1].21:=Chaskey_lb[6].5;
+	Chaskey_LastBlk[1].22:=Chaskey_lb[6].6;
+	Chaskey_LastBlk[1].23:=Chaskey_lb[6].7;
+	Chaskey_LastBlk[1].24:=Chaskey_lb[7].0;
+	Chaskey_LastBlk[1].25:=Chaskey_lb[7].1;
+	Chaskey_LastBlk[1].26:=Chaskey_lb[7].2;
+	Chaskey_LastBlk[1].27:=Chaskey_lb[7].3;
+	Chaskey_LastBlk[1].28:=Chaskey_lb[7].4;
+	Chaskey_LastBlk[1].29:=Chaskey_lb[7].5;
+	Chaskey_LastBlk[1].30:=Chaskey_lb[7].6;
+	Chaskey_LastBlk[1].31:=Chaskey_lb[7].7;
+
+	Chaskey_LastBlk[2].0:=Chaskey_lb[8].0;
+	Chaskey_LastBlk[2].1:=Chaskey_lb[8].1;
+	Chaskey_LastBlk[2].2:=Chaskey_lb[8].2;
+	Chaskey_LastBlk[2].3:=Chaskey_lb[8].3;
+	Chaskey_LastBlk[2].4:=Chaskey_lb[8].4;
+	Chaskey_LastBlk[2].5:=Chaskey_lb[8].5;
+	Chaskey_LastBlk[2].6:=Chaskey_lb[8].6;
+	Chaskey_LastBlk[2].7:=Chaskey_lb[8].7;
+	Chaskey_LastBlk[2].8:=Chaskey_lb[9].0;
+	Chaskey_LastBlk[2].9:=Chaskey_lb[9].1;
+	Chaskey_LastBlk[2].10:=Chaskey_lb[9].2;
+	Chaskey_LastBlk[2].11:=Chaskey_lb[9].3;
+	Chaskey_LastBlk[2].12:=Chaskey_lb[9].4;
+	Chaskey_LastBlk[2].13:=Chaskey_lb[9].5;
+	Chaskey_LastBlk[2].14:=Chaskey_lb[9].6;
+	Chaskey_LastBlk[2].15:=Chaskey_lb[9].7;
+	Chaskey_LastBlk[2].16:=Chaskey_lb[10].0;
+	Chaskey_LastBlk[2].17:=Chaskey_lb[10].1;
+	Chaskey_LastBlk[2].18:=Chaskey_lb[10].2;
+	Chaskey_LastBlk[2].19:=Chaskey_lb[10].3;
+	Chaskey_LastBlk[2].20:=Chaskey_lb[10].4;
+	Chaskey_LastBlk[2].21:=Chaskey_lb[10].5;
+	Chaskey_LastBlk[2].22:=Chaskey_lb[10].6;
+	Chaskey_LastBlk[2].23:=Chaskey_lb[10].7;
+	Chaskey_LastBlk[2].24:=Chaskey_lb[11].0;
+	Chaskey_LastBlk[2].25:=Chaskey_lb[11].1;
+	Chaskey_LastBlk[2].26:=Chaskey_lb[11].2;
+	Chaskey_LastBlk[2].27:=Chaskey_lb[11].3;
+	Chaskey_LastBlk[2].28:=Chaskey_lb[11].4;
+	Chaskey_LastBlk[2].29:=Chaskey_lb[11].5;
+	Chaskey_LastBlk[2].30:=Chaskey_lb[11].6;
+	Chaskey_LastBlk[2].31:=Chaskey_lb[11].7;
+
+	Chaskey_LastBlk[3].0:=Chaskey_lb[12].0;
+	Chaskey_LastBlk[3].1:=Chaskey_lb[12].1;
+	Chaskey_LastBlk[3].2:=Chaskey_lb[12].2;
+	Chaskey_LastBlk[3].3:=Chaskey_lb[12].3;
+	Chaskey_LastBlk[3].4:=Chaskey_lb[12].4;
+	Chaskey_LastBlk[3].5:=Chaskey_lb[12].5;
+	Chaskey_LastBlk[3].6:=Chaskey_lb[12].6;
+	Chaskey_LastBlk[3].7:=Chaskey_lb[12].7;
+	Chaskey_LastBlk[3].8:=Chaskey_lb[13].0;
+	Chaskey_LastBlk[3].9:=Chaskey_lb[13].1;
+	Chaskey_LastBlk[3].10:=Chaskey_lb[13].2;
+	Chaskey_LastBlk[3].11:=Chaskey_lb[13].3;
+	Chaskey_LastBlk[3].12:=Chaskey_lb[13].4;
+	Chaskey_LastBlk[3].13:=Chaskey_lb[13].5;
+	Chaskey_LastBlk[3].14:=Chaskey_lb[13].6;
+	Chaskey_LastBlk[3].15:=Chaskey_lb[13].7;
+	Chaskey_LastBlk[3].16:=Chaskey_lb[14].0;
+	Chaskey_LastBlk[3].17:=Chaskey_lb[14].1;
+	Chaskey_LastBlk[3].18:=Chaskey_lb[14].2;
+	Chaskey_LastBlk[3].19:=Chaskey_lb[14].3;
+	Chaskey_LastBlk[3].20:=Chaskey_lb[14].4;
+	Chaskey_LastBlk[3].21:=Chaskey_lb[14].5;
+	Chaskey_LastBlk[3].22:=Chaskey_lb[14].6;
+	Chaskey_LastBlk[3].23:=Chaskey_lb[14].7;
+	Chaskey_LastBlk[3].24:=Chaskey_lb[15].0;
+	Chaskey_LastBlk[3].25:=Chaskey_lb[15].1;
+	Chaskey_LastBlk[3].26:=Chaskey_lb[15].2;
+	Chaskey_LastBlk[3].27:=Chaskey_lb[15].3;
+	Chaskey_LastBlk[3].28:=Chaskey_lb[15].4;
+	Chaskey_LastBlk[3].29:=Chaskey_lb[15].5;
+	Chaskey_LastBlk[3].30:=Chaskey_lb[15].6;
+	Chaskey_LastBlk[3].31:=Chaskey_lb[15].7;
+end_if;
+
+
+Chaskey_input_pi[3] := Chaskey_input_pi[3] XOR Chaskey_LastBlk[3] ;
+Chaskey_input_pi[2] := Chaskey_input_pi[2] XOR Chaskey_LastBlk[2] ;
+Chaskey_input_pi[1] := Chaskey_input_pi[1] XOR Chaskey_LastBlk[1] ;
+Chaskey_input_pi[0] := Chaskey_input_pi[0] XOR Chaskey_LastBlk[0] ;
+
+Chaskey_input_pi[3] := Chaskey_input_pi[3] XOR Chaskey_L[3] ;
+Chaskey_input_pi[2] := Chaskey_input_pi[2] XOR Chaskey_L[2] ;
+Chaskey_input_pi[1] := Chaskey_input_pi[1] XOR Chaskey_L[1] ;
+Chaskey_input_pi[0] := Chaskey_input_pi[0] XOR Chaskey_L[0] ;
+
+JSR(CHASKEY_Permutation);
+
+Chaskey_input_pi[3] := Chaskey_input_pi[3] XOR Chaskey_L[3] ;
+Chaskey_input_pi[2] := Chaskey_input_pi[2] XOR Chaskey_L[2] ;
+Chaskey_input_pi[1] := Chaskey_input_pi[1] XOR Chaskey_L[1] ;
+Chaskey_input_pi[0] := Chaskey_input_pi[0] XOR Chaskey_L[0] ;
+
+//////////////////////////////////////////////
+
+Chaskey_tag[3] := Chaskey_input_pi[3];
+Chaskey_tag[2] := Chaskey_input_pi[2];
+Chaskey_tag[1] := Chaskey_input_pi[1];
+Chaskey_tag[0] := Chaskey_input_pi[0];
+
+JSR(CHASKEY_ClearKey);

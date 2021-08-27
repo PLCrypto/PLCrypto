@@ -1,0 +1,7 @@
+
+
+PT_State[0]:=PT_State[0] XOR PT_Rd_Key[0];
+	
+
+PT_State[1]:=PT_State[1] XOR PT_Rd_Key[1];
+	

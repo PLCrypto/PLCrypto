@@ -1,0 +1,89 @@
+//Input: g ∈ G, whereGisanadditivegroup,andapositiveintegere = (e_t, e_t−1 ···e _1 e_ 0 ) 2 .
+//OUTPUT: e · g.
+
+
+//A←0.
+//2. For i from t down to 0 do the following:
+//2.1 A←A + A.
+//2.2 If e i = 1 then A←A + g.
+//3. Return(A).
+
+/////////////////////////////////////////////////////////////////////////////////////////////
+
+
+For AddMul_i:=0 to AddMul_Digits-1 by 1 Do
+	AddMul_Result[AddMul_i]:=0;
+End_For;
+AddMul_exp_bitindx:=29; //indexing 30bits
+AddMul_exp_blk:=AddMul_Digits-2;
+
+
+For AddMul_i:=AddMul_Digits-2 to 0 by -1 Do 
+	While AddMul_exp_bitindx>=0 Do 
+		if AddMul_i<> AddMul_Digits-2 or AddMul_exp_bitindx <> 29 Then
+			Add_Digits:= AddMul_Digits-1; 
+				for Add_i:=0 to Add_Digits-1 by 1 do //assign value to input
+					Add_input_x[Add_i]:=AddMul_Result[Add_i];
+					Add_input_y[Add_i]:=AddMul_Result[Add_i];
+				end_for;
+			JSR(BigNumber_Add);
+			for Add_i:=0 to Add_Digits by 1 do //
+				AddMul_Result[Add_i]:=Add_Result[Add_i];
+			end_for;
+
+			JSR(Big_Comparison);
+			If Big_Comp_Res=1 Then           //mod m
+				Sub_Digits:= AddMul_Digits-1; 
+				for Sub_i:=0 to Sub_Digits-1 by 1 do //assign value to input
+					Add_input_x[Sub_i]:=AddMul_Result[Sub_i];
+					Add_input_y[Sub_i]:=AddMul_Base[Sub_i];
+				end_for;
+				JSR(BigNumber_Sub);
+				for Sub_i:=0 to Add_Digits by 1 do //
+					AddMul_Result[Sub_i]:=Add_Result[Sub_i];
+				end_for;
+			End_If;
+
+		End_IF;
+	
+
+	
+		If AddMul_input_exp[AddMul_exp_blk].[AddMul_exp_bitindx] Then
+			Add_Digits:= AddMul_Digits-1; 
+				for Add_i:=0 to Add_Digits-1 by 1 do //assign value to input
+					Add_input_x[Add_i]:=AddMul_Result[Add_i];
+					Add_input_y[Add_i]:=AddMul_input_g[Add_i];
+				end_for;
+			JSR(BigNumber_Add);
+			for Add_i:=0 to Add_Digits by 1 do //
+				AddMul_Result[Add_i]:=Add_Result[Add_i];
+			end_for;
+
+			JSR(Big_Comparison);
+			If Big_Comp_Res=1 Then           //mod m
+				Sub_Digits:= AddMul_Digits-1; 
+				for Sub_i:=0 to Sub_Digits-1 by 1 do //assign value to input
+					Add_input_x[Sub_i]:=AddMul_Result[Sub_i];
+					Add_input_y[Sub_i]:=AddMul_Base[Sub_i];
+				end_for;
+				JSR(BigNumber_Sub);
+				for Sub_i:=0 to Add_Digits by 1 do //
+					AddMul_Result[Sub_i]:=Add_Result[Sub_i];
+				end_for;
+			End_If;
+
+		End_If; 
+		AddMul_exp_bitindx:=AddMul_exp_bitindx-1;
+	
+	End_while;
+	
+
+	AddMul_exp_blk:=AddMul_exp_blk-1;
+	AddMul_exp_bitindx:=29;           
+
+
+End_For; 
+
+
+
+

@@ -1,0 +1,58 @@
+(*byte GetByte(const byte*str, int BitOffSet, int NoOfBits)
+    if S==8:
+        if (BitOffSet & 0x7):
+            res=((str[BitOffSet >> 3] << 4) | (str[(BitOffSet >> 3) + 1] >> 4))
+        else:
+            res=str[BitOffSet >> 3]
+    else:
+        res=(str[BitOffSet>>3] >> (4-(BitOffSet&0x4))) & ((1<<S)-1)
+
+    return res
+	*)
+
+
+PHT_GetByte_Res:=0;
+
+PHT_GetByte_Indx:=PHT_GetByte_BitOffSet/8;
+
+If PHT_S=8 Then
+	PHT_Tmp[0]:=PHT_GetByte_BitOffSet AND 16#7;
+	if PHT_Tmp[0]<>0 Then
+		If PHT_isPadding Then
+			PHT_Tmp[0]:=PHT_Padded[PHT_GetByte_Indx]*16;
+			PHT_Tmp[1]:=PHT_Padded[PHT_GetByte_Indx+1]/16;
+		else
+			PHT_Tmp[0]:=PHT_Message[PHT_GetByte_Indx]*16;
+			PHT_Tmp[1]:=PHT_Message[PHT_GetByte_Indx+1]/16;
+		End_If;
+		PHT_GetByte_Res:=(PHT_Tmp[0] OR PHT_Tmp[1]) AND 16#FF;
+	else
+		If PHT_isPadding Then
+			PHT_GetByte_Res:=PHT_Padded[PHT_GetByte_Indx];
+		Else
+			PHT_GetByte_Res:=PHT_Message[PHT_GetByte_Indx];
+		End_If;
+	End_if;
+Else
+	If PHT_isPadding Then
+		PHT_Tmp[0]:=PHT_Padded[PHT_GetByte_Indx];
+	Else
+		PHT_Tmp[0]:=PHT_Message[PHT_GetByte_Indx];
+	End_If;
+	
+
+	PHT_Tmp[1]:=4-(PHT_GetByte_BitOffSet AND 16#4);
+	Case PHT_Tmp[1] OF
+		1:
+			PHT_Tmp[0]:=PHT_Tmp[0]/2;
+		2:
+			PHT_Tmp[0]:=PHT_Tmp[0]/4;
+		3:
+			PHT_Tmp[0]:=PHT_Tmp[0]/8;
+		4:
+			PHT_Tmp[0]:=PHT_Tmp[0]/16;
+	End_CASE;
+	PHT_GetByte_Res:=PHT_Tmp[0] & 16#f;
+	
+End_if;
+

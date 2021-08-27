@@ -1,0 +1,105 @@
+
+	JSR(POA_PF_Init);
+		
+	POA_Second2:=Date_time[5];  //second
+	POA_Microsecond2:=Date_time[6];  //Microsecond
+
+	POA_SecondABS:=ABS(POA_Second2 - POA_Second1);
+	POA_MicrosecondABS:=ABS(POA_Microsecond2-POA_Microsecond1);
+	if (POA_SecondABS*1000000+POA_MicrosecondABS)>60000000 then  
+		//There was an attack, rasise an alarm....60000000 is 60 seconds
+	end_if;
+
+	//run chaskey to verify the MAC 
+	Chaskey_Message[0]:= POA_Pf_Indx;
+	Chaskey_Message[1] := POA_Chain_NM;
+	Chaskey_Message[2] := POA_Ins_NM;
+	Chaskey_Message[3]:=POA_Second1;   //Add time to message to compute MAC.
+	Chaskey_Message[4]:=POA_Microsecond1;   //Add time to message to compute MAC.
+	//Chaskey_m_len:=1696;
+	Chaskey_round:=7;
+	Chaskey_mlen:=4;
+	Chaskey_MsgBitLen:=160;  
+	JSR(CHASKEY_128);
+
+	If POA_tag[3]<>Chaskey_tag[3] OR POA_tag[2]<> Chaskey_tag[2]  OR POA_tag[1]<> Chaskey_tag[1] OR POA_tag[0]<> Chaskey_tag[0] then
+		//There was an attack, rasise an alarm....
+	end_if;
+
+	//use PRG to generate the head node
+	PRG_Counter[0]:= POA_Ins_NM;
+	PRG_Counter[1]:= POA_Chain_NM + POA_lr;
+	JSR(PRG_PRF_CHASKEY);
+	//256-bits result of MAC assign to checkpoint
+	for POA_i:=0 to 7 by 1 do   
+		POA_CKP[POA_i]:=PRG_Result[POA_i];	
+	end_for;
+	//use OWF to generate every check point
+	OWF_Input[0]:=POA_CKP[0];  
+	OWF_Input[1]:=POA_CKP[1];
+	OWF_Input[2]:=POA_CKP[2];
+	OWF_Input[3]:=POA_CKP[3];
+	OWF_Input[4]:=POA_CKP[4];
+	OWF_Input[5]:=POA_CKP[5];
+	OWF_Input[6]:=POA_CKP[6];
+	OWF_Input[7]:=POA_CKP[7];
+	OWF_Input[8]:=POA_CKP[8];
+
+	for POA_j:=0 to POA_Pf_Indx by 1 do 
+		JSR(Improved_OWF);
+			OWF_Input[0]:=OWF_Result[0];
+			OWF_Input[1]:=OWF_Result[1];
+			OWF_Input[2]:=OWF_Result[2];
+			OWF_Input[3]:=OWF_Result[3];
+			OWF_Input[4]:=OWF_Result[4];
+			OWF_Input[5]:=OWF_Result[5];
+			OWF_Input[6]:=OWF_Result[6];
+			OWF_Input[7]:=OWF_Result[7];
+			OWF_Input[8]:=OWF_Result[8];
+	end_for;
+
+	for POA_j:=0 to 7 by 1 do 
+		POA_Pf[POA_j]:= OWF_Result[POA_j];
+	end_for;
+	
+	POA_Pf_Indx:=POA_Pf_Indx -1;
+
+	if (POA_Pf_Indx=1) and (POA_Chain_NM=2139095040) then
+		
+		JSR(POA_Replenishment);
+	end_if;
+
+	//update check point's index..
+	if POA_Pf_Indx-1 = 1 then
+		if POA_Chain_NM<>256 then	// the chain is not used out
+			POA_Chain_NM:=POA_Chain_NM+POA_SC_Interval;
+		end_if;
+	end_if;	
+
+	POA_Second1:=Date_time[5];
+	POA_Microsecond1:=Date_time[6];
+
+	Chaskey_Message[0]:= POA_Pf_Indx;
+	Chaskey_Message[1] := POA_Chain_NM;
+	Chaskey_Message[2] := POA_Ins_NM;
+	Chaskey_Message[3]:=POA_Second1;   //Add time to message to compute MAC.
+	Chaskey_Message[4]:=POA_Microsecond1;   //Add time to message to compute MAC.
+	Chaskey_MsgBitLen:=160;  //5*32 bits.
+	Chaskey_mlen:=4;
+	Chaskey_round:=7;
+	JSR(CHASKEY_128);
+	
+	POA_tag[3]:=Chaskey_tag[3] ; 
+	POA_tag[2]:=Chaskey_tag[2]  ;
+	POA_tag[1]:=Chaskey_tag[1] ;
+	POA_tag[0]:=Chaskey_tag[0] ;
+	
+	//POA_time1:=GSV(WallClockTime,LocalDateTime,Date_time[6]);
+
+	// clear the credentials
+	for POA_j:=0 to 7 by 1 do	
+		POA_CKP[POA_j]:=0;
+		PRG_Result[POA_j]:=0;
+	end_for;
+
+

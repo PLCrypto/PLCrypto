@@ -1,0 +1,13 @@
+Name	        Data Type
+OWF_Add_c	DINT
+OWF_bit	        DINT
+OWF_blk	        DINT
+OWF_i	        DINT
+OWF_Input	DINT[16]
+OWF_InputLen	DINT
+OWF_InputMaxInd	DINT
+OWF_j	        DINT
+OWF_Key	        DINT[512,17]
+OWF_Result	DINT[17]
+OWF_Ver	        DINT
+SCAN_CYCLE_TIME	DINT

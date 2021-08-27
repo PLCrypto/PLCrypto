@@ -1,0 +1,28 @@
+ //key[3].31 is the MSB of the key, while key[0].0 is the LSB of the key
+(*Chaskey_key[0]:=0;
+Chaskey_key[1]:=17;
+Chaskey_key[2]:=34;
+Chaskey_key[3]:=51;*)
+
+Chaskey_key[0]:=857870592;
+Chaskey_key[1]:=2003195204;
+Chaskey_key[2]:=-1146447480;
+Chaskey_key[3]:=-1122868;
+
+Chaskey_tag[0] := 0;
+Chaskey_tag[1] := 0;
+Chaskey_tag[2] := 0;
+Chaskey_tag[3] := 0;
+
+//Initialize subkey_1[] and subkey_2[]
+Chaskey_subkey_1[0] := 1715741319; 
+Chaskey_subkey_1[1] := -288576888;
+Chaskey_subkey_1[2] := 2002070336;
+Chaskey_subkey_1[3] := -2245735;
+
+Chaskey_subkey_2[0] := -863484535;
+Chaskey_subkey_2[1] := -577153776;
+Chaskey_subkey_2[2] := -290822623;
+Chaskey_subkey_2[3] := -4491470;
+
+

@@ -1,0 +1,52 @@
+//Calculate the multiplication of big numbers.  Resource: page 595 of the handbook.
+//input: positive big intergers  Mul_input_x[] and Mul_input_y[], each having UHF_sints base UHF_base digits.
+//output: the result Mul_Result[] in radix UHF_base representation with 2*(UHF_sints-1) digits.
+
+
+// multiplication test
+(*if S:FS then
+	Mul_Digits:= 512;  //the Digits of input.
+	UHF_base:= 10; //input in decimal
+	Mul_v:=0;
+	Mul_compute:=0;
+	Mul_u:=0;
+	UHF_c:=0;
+	for Mul_i:=0 to Mul_Digits-1 by 1 do   //assign value to input
+		Mul_input_x[Mul_i]:=9;
+		Mul_input_y[Mul_i]:=9;
+	end_for;
+end_if;*)
+
+
+	for Mul_i:=0 to 2*Mul_Digits-1 by 1 do
+		Mul_Result[Mul_i]:=0;  //Initialize the result of multiplication to 0.
+	end_for;
+
+	for Mul_i:=0 to Mul_Digits-1 by 1 do 
+		Mul_c:=0;
+		for Mul_j:=0 to Mul_Digits by 1 do
+			Mul_Comp:= Mul_Result[Mul_i+Mul_j]+(Mul_input_y[Mul_j]*Mul_input_x[Mul_i]+Mul_c); //compute the result of every digit of Mul_input_y multiply one digit of Mul_input_x.
+	//UHF_Mul_input_x[UHF_i]*UHF_Mul_input_y[UHF_j] = (UHF_Mul_u||UHF_Mul_v)UHF_base.
+			if Mul_Comp > Big_base-1 then  //if the Mul_compute is greater than UHF_base-1, then split Mul_compute.
+				Mul_v:= Mul_Comp mod Big_base; 
+				Mul_u:= Mul_Comp / Big_base;
+			else
+				Mul_v:= Mul_Comp;
+				Mul_u:=0;
+			end_if;
+			Mul_Result[Mul_i+Mul_j]:=Mul_v; //Result of multiplication
+			Mul_c:= Mul_u;   //the carry is equal to left half bits of Mul_compute.
+		end_for;
+	end_for;
+
+	for Mul_i:=0 to Mul_Digits-1 by 1 do
+		Mul_input_x[Mul_i]:=0;
+		Mul_input_y[Mul_i]:=0;
+	end_for;
+
+	Mul_u:=0;
+	Mul_v:=0;
+	
+
+
+

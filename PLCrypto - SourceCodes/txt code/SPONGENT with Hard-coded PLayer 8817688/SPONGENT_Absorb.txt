@@ -1,0 +1,15 @@
+(*
+int i;
+	for(i = 0; i < R_SizeInBytes; i++)	
+		state->value[i] ^= state->messageblock[i];
+ 	Permute(state);
+	
+	return SUCCESS;
+
+	*)
+
+For Spon_Absorb_i:=0 to Spon_R_SizeInBytes-1 by 1 Do
+	Spon_State[Spon_Absorb_i]:= Spon_State[Spon_Absorb_i] Xor Spon_messageblock[Spon_Absorb_i];
+End_for;
+
+JSR(SPONGENT_Permute);

@@ -1,0 +1,17 @@
+Name	   		Data Type
+UOWHF_Add_c		DINT
+SCAN_CYCLE_TIME		DINT
+UOWHF_i			DINT
+UOWHF_InputLen		DINT
+UOWHF_InputMaxInd	DINT
+UOWHF_Msg		DINT[16]
+UOWHF_OutputMaxInd	DINT
+UOWHF_Result		DINT[17]
+UOWHF_Vary_BlkNum	DINT
+UOWHF_Vary_i		DINT
+UOWHF_Vary_j		DINT
+UOWHF_Vary_Message	DINT[512]
+UOWHF_Vary_MsgLen	DINT
+UOWHF_Vary_z		DINT
+UOWHF_VaryLen		DINT
+UOWHF_Ver		DINT

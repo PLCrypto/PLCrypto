@@ -1,0 +1,22 @@
+Case UOWHF_Ver OF
+0:
+	UOWHF_InputLen:=255;  //bits of input.
+	UOWHF_InputMaxInd:=8;  //maximum index for dints which store the bits of input. 
+ 	For UOWHF_i:=0 to UOWHF_InputMaxInd by 1 do
+		UOWHF_Result[UOWHF_i]:=0;
+	End_For;
+1:
+	UOWHF_InputLen:= 383;
+	UOWHF_InputMaxInd:=12;  //maximum index for array.
+ 	For UOWHF_i:=0 to UOWHF_InputMaxInd by 1 do
+		UOWHF_Result[UOWHF_i]:=0;
+	End_For;
+2:
+	UOWHF_InputLen:= 511;
+	UOWHF_InputMaxInd:=16;  //maximum index for array.
+	 For UOWHF_i:=0 to UOWHF_InputMaxInd by 1 do
+		UOWHF_Result[UOWHF_i]:=0;
+	End_For;
+End_Case;
+
+UOWHF_OutputMaxInd := UOWHF_InputMaxInd/2;

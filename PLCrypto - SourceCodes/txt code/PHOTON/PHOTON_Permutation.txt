@@ -1,0 +1,12 @@
+
+for PHT_Per_r:=0 to PHT_round-1 by 1 do
+	
+	//addkey
+	for PHT_Per_i:=0 to PHT_D-1 by 1 do
+		PHT_State[PHT_Per_i,0]:= PHT_State[PHT_Per_i,0] XOR PHT_RC[PHT_Per_i,PHT_Per_r];
+
+	end_for;
+
+	JSR(PHOTON_SCShRMCS);
+
+end_for;	

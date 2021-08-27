@@ -1,0 +1,17 @@
+//POA_PRG_Indx for replenishment 
+
+
+	POA_Ins_NM:= POA_Ins_NM+1;  //compute a new instance.
+ 
+	POA_Chain_NM :=0;   //the number of OWF sub-chain
+ 	
+
+
+	UOWHF_Ver:=0;
+
+	
+	JSR(POA_PF_Init);
+
+
+
+
